@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/11 20:11:05 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/18 20:32:07 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,33 @@ void builtin_echo(t_minishell *data)
         ft_putstr_fd("\n", 1);
 
     data->exit_status = 0;
+}
+
+void builtin_exit(t_minishell *data)
+{
+    if (data->command->args[1] == NULL)
+    {
+        data->exit_status = 0;
+        //free everything
+        ft_putstr_fd("exit\n", 1);
+        exit(0);
+    }
+    else if (data->command->args[1] && !ft_isnbr(data->command->args[1]))
+    {
+        data->exit_status = 2;
+        print_exit_error(data->command->args[1], "numeric argument required");
+        //free everything
+        exit(2);
+    }
+    else if (data->command->args[1] && data->command->args[2])
+    {
+        data->exit_status = 1;
+        print_exit_error(NULL, "too many arguments");
+    }
+    else
+    {
+        data->exit_status = ft_atoll(data->command->args[1]) % 256; //include atoll in libft
+        ft_putstr_fd("exit\n", 1);
+        exit(data->exit_status);
+    }
 }
