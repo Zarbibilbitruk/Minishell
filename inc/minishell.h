@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/18 20:28:17 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:17:10 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_parsed_command
 
 typedef struct s_parsed_env
 {
+    char    **envp;
     char    *title;
     char    *value;
     struct s_parsed_env *next; // will we use a linked list to store the variables?
@@ -45,6 +46,7 @@ typedef struct s_parsed_env
 typedef struct s_minishell
 {
     t_parsed_env *env;
+    t_parsed_env *exported;
     t_parsed_command *command;
     int     exit_status;
 }   t_minishell;

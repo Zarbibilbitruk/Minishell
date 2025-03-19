@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/18 20:32:07 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:17:28 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,3 +127,29 @@ void builtin_exit(t_minishell *data)
         exit(data->exit_status);
     }
 }
+
+void builtin_env(t_minishell *data)
+{
+    int i;
+
+    i = 0;
+    if (!data->env->envp)
+    {
+        data->exit_status = 1;
+        return ;
+    }
+    if (data->command->args[1])
+    {
+        ft_putstr_fd("env: too many arguments\n", 2); //msg: env: doesn't take arguments
+        data->exit_status = 1;
+        return ;
+    }
+    while (data->env->envp[i])
+    {
+        ft_putstr_fd(data->env->envp[i], 1);
+        ft_putstr_fd("\n", 1);
+        i++;
+    }
+    data->exit_status = 0;
+}
+
