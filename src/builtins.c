@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/19 16:17:28 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:33:24 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,8 @@ void builtin_exit(t_minishell *data)
 
 void builtin_env(t_minishell *data)
 {
-    int i;
-
-    i = 0;
+    t_parsed_env *cur_env_node;
+    cur_env_node = data->env;
     if (!data->env->envp)
     {
         data->exit_status = 1;
@@ -144,12 +143,32 @@ void builtin_env(t_minishell *data)
         data->exit_status = 1;
         return ;
     }
-    while (data->env->envp[i])
+    while (cur_env_node)
     {
-        ft_putstr_fd(data->env->envp[i], 1);
-        ft_putstr_fd("\n", 1);
-        i++;
-    }
+        printf("%s=%s\n", cur_env_node->title, cur_env_node->value);
+        cur_env_node = cur_env_node->next;
+    }  
     data->exit_status = 0;
 }
 
+void builtin_export(t_minishell *data)
+{
+    int i;
+    t_parsed_env *cur_exp_node;
+
+    cur_exp_node = data->exported;
+    i = 1;
+    if (!data->command->args[i])
+    {
+        print_exported(data->exported);
+        data->exit_status = 0;
+        return ;
+    }
+    /*can take a list of arguments
+    - first search to see if he argument is already in the exp list
+    - if the argument contains an =, it will be added to the exp and env list
+    - if the argument doesn't contain an =, it will be only added to the exp list
+    - if the argument is already in the env list, it will be updated (if not in env and add a value include to env)
+    - if the argument is already in the exported list, it will be updated
+    */
+}

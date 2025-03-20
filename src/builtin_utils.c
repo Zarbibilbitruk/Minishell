@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 18:18:08 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/19 19:27:15 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:27:35 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,4 +122,35 @@ void add_exp(t_minishell *data, char *env)
     while (tmp->next)
         tmp = tmp->next;
     tmp->next = new;
+}
+
+char *ft_strndup(const char *s1, size_t n)
+{
+    char *str;
+    size_t i;
+
+    i = 0;
+    str = malloc(sizeof(char) * (n + 1));
+    if (!str)
+        return (NULL);
+    while (s1[i] && i < n)
+    {
+        str[i] = s1[i];
+        i++;
+    }
+    str[i] = '\0';
+    return (str);
+}
+//learn how to put quotes in the value
+void print_exported(t_parsed_env *cur_exp_node)
+{
+    while (cur_exp_node)
+    {
+        ft_putstr_fd("export ", 1);
+        ft_putstr_fd(cur_exp_node->title, 1);
+        ft_putstr_fd("=", 1);
+        ft_putstr_fd(cur_exp_node->value, 1);
+        ft_putstr_fd("\n", 1);
+        cur_exp_node = cur_exp_node->next;
+    }
 }
