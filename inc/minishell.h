@@ -32,7 +32,7 @@ typedef struct s_parsed_command
 {
     char    *command;
     int     buitlin;
-    char    **args; //// will we use an array of str to store the variables?
+    char    **args; //we need an array with the cmd and args to pass to execve
 }   t_parsed_command;
 
 typedef struct s_parsed_env

@@ -60,7 +60,7 @@ void init_env(t_minishell *data, char **envp)
     {
         if (i == 0)
         {
-            data->env->title = ft_strndup(envp[i], ft_strchr(envp[i], '=') - envp[i]);
+            data->env->title = ft_substr(envp[i], 0, ft_strchr(envp[i], '=') - envp[i]);
             data->env->value = ft_strdup(ft_strchr(envp[i], '=') + 1);
         }
         else
@@ -76,7 +76,7 @@ void add_env(t_minishell *data, char *env)
 
     new = malloc(sizeof(t_parsed_env));
     new->envp = data->env->envp;
-    new->title = ft_strndup(env, ft_strchr(env, '=') - env);
+    new->title = ft_substr(env, 0, ft_strchr(env, '=') - env);
     new->value = ft_strdup(ft_strchr(env, '=') + 1);
     new->next = NULL;
     tmp = data->env;
@@ -99,7 +99,7 @@ void init_exp(t_minishell *data, char **envp)
     {
         if (i == 0)
         {
-            data->exported->title = ft_strndup(envp[i], ft_strchr(envp[i], '=') - envp[i]);
+            data->exported->title = ft_substr(envp[i], 0, ft_strchr(envp[i], '=') - envp[i]);
             data->exported->value = ft_strdup(ft_strchr(envp[i], '=') + 1);
         }
         else
@@ -115,7 +115,7 @@ void add_exp(t_minishell *data, char *env)
 
     new = malloc(sizeof(t_parsed_env));
     new->envp = data->exported->envp;
-    new->title = ft_strndup(env, ft_strchr(env, '=') - env);
+    new->title = ft_substr(env, 0, ft_strchr(env, '=') - env);
     new->value = ft_strdup(ft_strchr(env, '=') + 1);
     new->next = NULL;
     tmp = data->exported;
@@ -124,23 +124,6 @@ void add_exp(t_minishell *data, char *env)
     tmp->next = new;
 }
 
-char *ft_strndup(const char *s1, size_t n)
-{
-    char *str;
-    size_t i;
-
-    i = 0;
-    str = malloc(sizeof(char) * (n + 1));
-    if (!str)
-        return (NULL);
-    while (s1[i] && i < n)
-    {
-        str[i] = s1[i];
-        i++;
-    }
-    str[i] = '\0';
-    return (str);
-}
 //learn how to put quotes in the value
 void print_exported(t_parsed_env *cur_exp_node)
 {
@@ -153,4 +136,112 @@ void print_exported(t_parsed_env *cur_exp_node)
         ft_putstr_fd("\n", 1);
         cur_exp_node = cur_exp_node->next;
     }
+}
+
+void check_exp(t_minishell *data, char *arg)
+{
+    t_parsed_env *cur_exp_node;
+
+    cur_exp_node = data->exported;
+    while (cur_exp_node)
+    {
+        if (ft_strncmp(cur_exp_node->title, arg, ft_strlen(cur_exp_node->title)) == 0)
+        {
+            if (cur_exp_node->value)
+            {
+                free(cur_exp_node->value);
+                check_env(data, arg);
+            }         
+            cur_exp_node->value = ft_strdup(ft_strchr(arg, '=') + 1); 
+            return ;
+        }
+        cur_exp_node = cur_exp_node->next;
+    }
+    if (ft_strchr(arg, '='))
+        add_env(data, arg);
+    add_exp(data, arg);
+}
+
+void    check_env(t_minishell *data, char *arg)
+{
+    t_parsed_env *cur_env_node;
+
+    cur_env_node = data->env;
+    while (cur_env_node)
+    {
+        if (ft_strncmp(cur_env_node->title, arg, ft_strlen(cur_env_node->title)) == 0)
+        {
+            if (cur_env_node->value)
+                free(cur_env_node->value);
+            cur_env_node->value = ft_strdup(ft_strchr(arg, '=') + 1);
+            return ;
+        }
+        cur_env_node = cur_env_node->next;
+    }
+    add_env(data, arg);
+}
+
+void    remove_env(t_minishell *data, char *arg)
+{
+    t_parsed_env *cur_env_node;
+    t_parsed_env *prev_env_node;
+
+    cur_env_node = data->env;
+    prev_env_node = NULL;
+    while (cur_env_node)
+    {
+        if (ft_strcmp(cur_env_node->title, arg) == 0)
+        {
+            if (prev_env_node)
+                prev_env_node->next = cur_env_node->next;
+            else
+                data->env = cur_env_node->next;
+            free(cur_env_node->title);
+            free(cur_env_node->value);
+            free(cur_env_node);
+            return ;
+        }
+        prev_env_node = cur_env_node;
+        cur_env_node = cur_env_node->next;
+    }
+}
+
+void    remove_exp(t_minishell *data, char *arg)
+{
+    t_parsed_env *cur_exp_node;
+    t_parsed_env *prev_exp_node;
+
+    cur_exp_node = data->exported;
+    prev_exp_node = NULL;
+    while (cur_exp_node)
+    {
+        if (ft_strcmp(cur_exp_node->title, arg) == 0)
+        {
+            if (prev_exp_node)
+                prev_exp_node->next = cur_exp_node->next;
+            else
+                data->exported = cur_exp_node->next;
+            free(cur_exp_node->title);
+            free(cur_exp_node->value);
+            free(cur_exp_node);
+            return ;
+        }
+        prev_exp_node = cur_exp_node;
+        cur_exp_node = cur_exp_node->next;
+    }
+}
+
+//cd utils
+char    *ft_getenv(char *directory_name, t_minishell *data)
+{
+    t_parsed_env *cur_env_node;
+
+    cur_env_node = data->env;
+    while (cur_env_node)
+    {
+        if (ft_strcmp(cur_env_node->title, directory_name) == 0)
+            return (cur_env_node->value);
+        cur_env_node = cur_env_node->next;
+    }
+    return (NULL);
 }

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+//IMPORTANT: Make a func to print error if optionas are included with the command
 // In this file, we will implement the builtins functions: echo -n, cd, pwd, export, unset, env, exit
 // I coded this functions as the parsing would be done using strings, but I'll change if we use linked lists
 
@@ -158,17 +159,68 @@ void builtin_export(t_minishell *data)
 
     cur_exp_node = data->exported;
     i = 1;
-    if (!data->command->args[i])
+    if (!data->command->args[i] || (ft_strcmp(data->command->args[i], "--") == 0 && !data->command->args[i + 1]))
     {
         print_exported(data->exported);
         data->exit_status = 0;
         return ;
     }
-    /*can take a list of arguments
-    - first search to see if he argument is already in the exp list
-    - if the argument contains an =, it will be added to the exp and env list
-    - if the argument doesn't contain an =, it will be only added to the exp list
-    - if the argument is already in the env list, it will be updated (if not in env and add a value include to env)
-    - if the argument is already in the exported list, it will be updated
-    */
+    if (ft_strcmp(data->command->args[i], "--") == 0 && data->command->args[i + 1])
+        i++;
+    if (ft_strncmp(data->command->args[i], "-", 1) == 0 && data->command->args[i][1] != '\0')
+    {
+        ft_putstr_fd("export: invalid option\n", 2); //OPTIONS ARE NOT ALLOWED
+        data->exit_status = 1;
+        return ;
+    }
+    while (data->command->args[i])
+    {
+        check_export(data, data->command->args[i]);
+        i++;
+    }
+}
+
+void    builtin_unset(t_minishell *data)
+{
+    int i;
+
+    i = 1;
+    if (!data->command->args[i])
+    {
+        data->exit_status = 0;
+        return ;
+    }
+    while (data->command->args[i])
+    {
+        remove_env(data, &data->command->args[i]);
+        remove_exp(data, &data->command->args[i]);
+        i++;
+    }
+    data->exit_status = 0;
+}
+//update OLDPATH
+//update PWD
+void bultin_cd(t_minishell *data)
+{
+    if (!data->command->args[1])
+    {
+        if (chdir(ft_getenv("HOME", &data)) == -1)
+        {
+            perror("cd");
+            data->exit_status = 1;
+            return ;
+        }
+    }
+    else if (data->command->args[2])
+    {
+        ft_putstr_fd("cd: too many arguments\n", 2); //msg: cd: too many arguments
+        data->exit_status = 1;
+        return ;
+    }
+    else if (chdir(data->command->args[1]) == -1)
+    {
+        perror("cd");
+        data->exit_status = 1;
+        return ;
+    }
 }
