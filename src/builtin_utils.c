@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 18:18:08 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/20 18:27:35 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:14:33 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ void check_exp(t_minishell *data, char *arg)
         add_env(data, arg);
     add_exp(data, arg);
 }
-
+//update de node or add a new one
 void    check_env(t_minishell *data, char *arg)
 {
     t_parsed_env *cur_env_node;
@@ -244,4 +244,21 @@ char    *ft_getenv(char *directory_name, t_minishell *data)
         cur_env_node = cur_env_node->next;
     }
     return (NULL);
+}
+
+void    set_env(char *title, char *value, t_minishell *data)
+{
+    t_parsed_env *cur_env_node;
+
+    cur_env_node = data->env;
+    while (cur_env_node)
+    {
+        if (ft_strcmp(cur_env_node->title, title) == 0)
+        {
+            free(cur_env_node->value);
+            cur_env_node->value = ft_strdup(value);
+            return ;
+        }
+        cur_env_node = cur_env_node->next;
+    }
 }

@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/20 18:33:24 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:14:44 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,11 @@ void    builtin_unset(t_minishell *data)
 //update PWD
 void bultin_cd(t_minishell *data)
 {
-    if (!data->command->args[1])
+    char *old_pwd;
+    char *cur_dir;
+    
+    old_pwd = getcwd(NULL, 0);
+    if (!data->command->args[1] || ft_strcmp(data->command->args[1], "~") == 0) //cd to home
     {
         if (chdir(ft_getenv("HOME", &data)) == -1)
         {
@@ -210,17 +214,35 @@ void bultin_cd(t_minishell *data)
             data->exit_status = 1;
             return ;
         }
+        //set_env("OLDPWD", old_pwd, &data);
+        //set_env("PWD", getcwd(NULL, 0), &data);
     }
-    else if (data->command->args[2])
+    else if (data->command->args[2]) //cd to many arguments
     {
-        ft_putstr_fd("cd: too many arguments\n", 2); //msg: cd: too many arguments
+        ft_putstr_fd("cd: too many arguments\n", 2);
         data->exit_status = 1;
         return ;
     }
-    else if (chdir(data->command->args[1]) == -1)
+    else if (ft_strcmp(data->command->args[1], "-") == 0) //cd - to previous directory
     {
-        perror("cd");
-        data->exit_status = 1;
-        return ;
+        if (chdir(ft_getenv("OLDPWD", &data)) == -1)
+        {
+            perror("cd");
+            data->exit_status = 1;
+            return ;
+        }
+        set_env("OLDPWD", old_pwd, &data);
+        set_env("PWD", getcwd(NULL, 0), &data);
+    }
+    else
+    {
+        if (chdir(data->command->args[1]) == -1)
+        {
+            perror("cd");
+            data->exit_status = 1;
+            return ;
+        }
+        set_env("OLDPWD", old_pwd, &data);
+        set_env("PWD", getcwd(NULL, 0), &data);
     }
 }
