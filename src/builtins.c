@@ -6,10 +6,11 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/11 20:11:05 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:33:24 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//IMPORTANT: Make a func to print error if optionas are included with the command
 // In this file, we will implement the builtins functions: echo -n, cd, pwd, export, unset, env, exit
 // I coded this functions as the parsing would be done using strings, but I'll change if we use linked lists
 
@@ -97,4 +98,129 @@ void builtin_echo(t_minishell *data)
         ft_putstr_fd("\n", 1);
 
     data->exit_status = 0;
+}
+
+void builtin_exit(t_minishell *data)
+{
+    if (data->command->args[1] == NULL)
+    {
+        data->exit_status = 0;
+        //free everything
+        ft_putstr_fd("exit\n", 1);
+        exit(0);
+    }
+    else if (data->command->args[1] && !ft_isnbr(data->command->args[1]))
+    {
+        data->exit_status = 2;
+        print_exit_error(data->command->args[1], "numeric argument required");
+        //free everything
+        exit(2);
+    }
+    else if (data->command->args[1] && data->command->args[2])
+    {
+        data->exit_status = 1;
+        print_exit_error(NULL, "too many arguments");
+    }
+    else
+    {
+        data->exit_status = ft_atoll(data->command->args[1]) % 256; //include atoll in libft
+        ft_putstr_fd("exit\n", 1);
+        exit(data->exit_status);
+    }
+}
+
+void builtin_env(t_minishell *data)
+{
+    t_parsed_env *cur_env_node;
+    cur_env_node = data->env;
+    if (!data->env->envp)
+    {
+        data->exit_status = 1;
+        return ;
+    }
+    if (data->command->args[1])
+    {
+        ft_putstr_fd("env: too many arguments\n", 2); //msg: env: doesn't take arguments
+        data->exit_status = 1;
+        return ;
+    }
+    while (cur_env_node)
+    {
+        printf("%s=%s\n", cur_env_node->title, cur_env_node->value);
+        cur_env_node = cur_env_node->next;
+    }  
+    data->exit_status = 0;
+}
+
+void builtin_export(t_minishell *data)
+{
+    int i;
+    t_parsed_env *cur_exp_node;
+
+    cur_exp_node = data->exported;
+    i = 1;
+    if (!data->command->args[i] || (ft_strcmp(data->command->args[i], "--") == 0 && !data->command->args[i + 1]))
+    {
+        print_exported(data->exported);
+        data->exit_status = 0;
+        return ;
+    }
+    if (ft_strcmp(data->command->args[i], "--") == 0 && data->command->args[i + 1])
+        i++;
+    if (ft_strncmp(data->command->args[i], "-", 1) == 0 && data->command->args[i][1] != '\0')
+    {
+        ft_putstr_fd("export: invalid option\n", 2); //OPTIONS ARE NOT ALLOWED
+        data->exit_status = 1;
+        return ;
+    }
+    while (data->command->args[i])
+    {
+        check_export(data, data->command->args[i]);
+        i++;
+    }
+}
+
+void    builtin_unset(t_minishell *data)
+{
+    int i;
+
+    i = 1;
+    if (!data->command->args[i])
+    {
+        data->exit_status = 0;
+        return ;
+    }
+    while (data->command->args[i])
+    {
+        remove_env(data, &data->command->args[i]);
+        remove_exp(data, &data->command->args[i]);
+        i++;
+    }
+    data->exit_status = 0;
+}
+//update OLDPATH
+//update PWD
+void bultin_cd(t_minishell *data)
+{
+    if (!data->command->args[1])
+    {
+        if (chdir(ft_getenv("HOME", &data)) == -1)
+        {
+            perror("cd");
+            data->exit_status = 1;
+            return ;
+        }
+    }
+    else if (data->command->args[2])
+    {
+        ft_putstr_fd("cd: too many arguments\n", 2); //msg: cd: too many arguments
+        data->exit_status = 1;
+        return ;
+    }
+    else if (chdir(data->command->args[1]) == -1)
+    {
+        perror("cd");
+        data->exit_status = 1;
+        return ;
+    }
 }
