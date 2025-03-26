@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/25 17:14:44 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/26 19:43:51 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #include "minishell.h"
 
-void is_builtin(t_minishell *data)
+int is_builtin(t_minishell *data)
 {
     if ((ft_strcmp(data->command->args[0], "echo") == 0)
     || (ft_strcmp(data->command->args[0], "cd") == 0)
@@ -25,16 +25,14 @@ void is_builtin(t_minishell *data)
     || (ft_strcmp(data->command->args[0], "unset") == 0)
     || (ft_strcmp(data->command->args[0], "env") == 0)
     || (ft_strcmp(data->command->args[0], "exit") == 0))
-        data->command->builtin = 1;
+        return 1;
     else
-        data->command->builtin = 0;
+        return 0;
 }
 
 void builtin_hub(t_minishell *data)
 {
-    if (data->command->builtin == 0)
-        return ;
-    else if (ft_strcmp(data->command->args[0], "echo") == 0)
+    if (ft_strcmp(data->command->args[0], "echo") == 0)
         builtin_echo(data);
     else if (ft_strcmp(data->command->args[0], "cd") == 0)
         builtin_cd(data);
@@ -57,18 +55,18 @@ void builtin_pwd(t_minishell *data)
     if (data->command->args[1])
     {
         ft_putstr_fd("pwd: too many arguments\n", 2); //msg: pwd: doesn't take arguments
-        data->exit_status = 1;
+        data->exit_code = 1;
         return ;
     }
     cwd = getcwd(NULL, 0);
     if (!cwd)
     {
         perror("pwd");
-        data->exit_status = 1;
+        data->exit_code = 1;
         return ;
     }
     printf("%s\n", cwd);
-    data->exit_status = 0;
+    data->exit_code = 0;
     free(cwd);
 }
 
@@ -97,35 +95,35 @@ void builtin_echo(t_minishell *data)
     if (!n_flag)
         ft_putstr_fd("\n", 1);
 
-    data->exit_status = 0;
+    data->exit_code = 0;
 }
 
 void builtin_exit(t_minishell *data)
 {
     if (data->command->args[1] == NULL)
     {
-        data->exit_status = 0;
+        data->exit_code = 0;
         //free everything
         ft_putstr_fd("exit\n", 1);
         exit(0);
     }
     else if (data->command->args[1] && !ft_isnbr(data->command->args[1]))
     {
-        data->exit_status = 2;
+        data->exit_code = 2;
         print_exit_error(data->command->args[1], "numeric argument required");
         //free everything
         exit(2);
     }
     else if (data->command->args[1] && data->command->args[2])
     {
-        data->exit_status = 1;
+        data->exit_code = 1;
         print_exit_error(NULL, "too many arguments");
     }
     else
     {
-        data->exit_status = ft_atoll(data->command->args[1]) % 256; //include atoll in libft
+        data->exit_code = ft_atoll(data->command->args[1]) % 256; //include atoll in libft
         ft_putstr_fd("exit\n", 1);
-        exit(data->exit_status);
+        exit(data->exit_code);
     }
 }
 
@@ -135,13 +133,13 @@ void builtin_env(t_minishell *data)
     cur_env_node = data->env;
     if (!data->env->envp)
     {
-        data->exit_status = 1;
+        data->exit_code = 1;
         return ;
     }
     if (data->command->args[1])
     {
         ft_putstr_fd("env: too many arguments\n", 2); //msg: env: doesn't take arguments
-        data->exit_status = 1;
+        data->exit_code = 1;
         return ;
     }
     while (cur_env_node)
@@ -149,7 +147,7 @@ void builtin_env(t_minishell *data)
         printf("%s=%s\n", cur_env_node->title, cur_env_node->value);
         cur_env_node = cur_env_node->next;
     }  
-    data->exit_status = 0;
+    data->exit_code = 0;
 }
 
 void builtin_export(t_minishell *data)
@@ -162,7 +160,7 @@ void builtin_export(t_minishell *data)
     if (!data->command->args[i] || (ft_strcmp(data->command->args[i], "--") == 0 && !data->command->args[i + 1]))
     {
         print_exported(data->exported);
-        data->exit_status = 0;
+        data->exit_code = 0;
         return ;
     }
     if (ft_strcmp(data->command->args[i], "--") == 0 && data->command->args[i + 1])
@@ -170,7 +168,7 @@ void builtin_export(t_minishell *data)
     if (ft_strncmp(data->command->args[i], "-", 1) == 0 && data->command->args[i][1] != '\0')
     {
         ft_putstr_fd("export: invalid option\n", 2); //OPTIONS ARE NOT ALLOWED
-        data->exit_status = 1;
+        data->exit_code = 1;
         return ;
     }
     while (data->command->args[i])
@@ -187,7 +185,7 @@ void    builtin_unset(t_minishell *data)
     i = 1;
     if (!data->command->args[i])
     {
-        data->exit_status = 0;
+        data->exit_code = 0;
         return ;
     }
     while (data->command->args[i])
@@ -196,7 +194,7 @@ void    builtin_unset(t_minishell *data)
         remove_exp(data, &data->command->args[i]);
         i++;
     }
-    data->exit_status = 0;
+    data->exit_code = 0;
 }
 //update OLDPATH
 //update PWD
@@ -211,7 +209,7 @@ void bultin_cd(t_minishell *data)
         if (chdir(ft_getenv("HOME", &data)) == -1)
         {
             perror("cd");
-            data->exit_status = 1;
+            data->exit_code = 1;
             return ;
         }
         //set_env("OLDPWD", old_pwd, &data);
@@ -220,7 +218,7 @@ void bultin_cd(t_minishell *data)
     else if (data->command->args[2]) //cd to many arguments
     {
         ft_putstr_fd("cd: too many arguments\n", 2);
-        data->exit_status = 1;
+        data->exit_code = 1;
         return ;
     }
     else if (ft_strcmp(data->command->args[1], "-") == 0) //cd - to previous directory
@@ -228,7 +226,7 @@ void bultin_cd(t_minishell *data)
         if (chdir(ft_getenv("OLDPWD", &data)) == -1)
         {
             perror("cd");
-            data->exit_status = 1;
+            data->exit_code = 1;
             return ;
         }
         set_env("OLDPWD", old_pwd, &data);
@@ -239,7 +237,7 @@ void bultin_cd(t_minishell *data)
         if (chdir(data->command->args[1]) == -1)
         {
             perror("cd");
-            data->exit_status = 1;
+            data->exit_code = 1;
             return ;
         }
         set_env("OLDPWD", old_pwd, &data);
