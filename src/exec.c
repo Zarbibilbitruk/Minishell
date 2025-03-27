@@ -6,30 +6,46 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:55:12 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/26 19:48:21 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/27 17:36:33 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int exec_hub(t_data *data)
+int exec_hub(t_minishell *data)
 {
     if (data->cmd_nb == 1)
     {
         if (ft_isbuiltin(data->cmd_list))
-            ft_builtin(data);
+            builtin_hub(data);
         else
-            ft_exec_cmd(data);  // handles redirections, fork, execve
+            exec_cmd_hub(data);  // handles redirections, fork, execve
     }
     else
-        exec_pipe(data);
+        exec_cmd_hub(data);
 }
 
-void exec_pipe(t_data *data)
+void    exec_cmd_hub(t_minishell *data)
 {
-    data->pipe_ends = ft_create_pipe_ends(data->cmd_nb - 1);
-    if (!data->pipe_ends)
-        ft_error(data); // Error handling
-        return ;
-    ft_exec_cmd(data);  // Fork each command, connect via pipes
+    int i;
+    
+    i = 0;
+    if (data->cmd_nb > 1)
+    {
+        data->pipe_ends = (int **)malloc(sizeof(int *) * (data->cmd_nb - 1));
+        if (!data->pipe_ends)
+            ft_error(data); // Error allocating memory
+        while (i < data->cmd_nb - 1)
+        {
+            data->pipe_ends[i] = (int *)malloc(sizeof(int) * 2);
+            if (!data->pipe_ends[i])
+                ft_error(data); // Error allocating memory
+            i++;
+        }
+        create_pipes(data);
+    }
+    create_processes(data);
+    free_pipes(data);
 }
+
+

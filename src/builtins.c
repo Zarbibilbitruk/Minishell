@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/26 19:43:51 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:53:10 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void builtin_exit(t_minishell *data)
 
 void builtin_env(t_minishell *data)
 {
-    t_parsed_env *cur_env_node;
+    t_pars_env *cur_env_node;
     cur_env_node = data->env;
     if (!data->env->envp)
     {
@@ -153,7 +153,7 @@ void builtin_env(t_minishell *data)
 void builtin_export(t_minishell *data)
 {
     int i;
-    t_parsed_env *cur_exp_node;
+    t_pars_env *cur_exp_node;
 
     cur_exp_node = data->exported;
     i = 1;

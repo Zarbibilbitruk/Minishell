@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:01:52 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/26 19:38:55 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/27 20:57:10 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void test(int signal)
 //maybe include the loop inside the main function
 void main_loop(t_minishell *data, char **envp, int ac, char **av)
 {
-    char *line;
     while (1)
     {
         data->user_input = readline("minishell$ ");
@@ -62,7 +61,8 @@ int main(int ac, char **av, char **envp)
     //allocating memory for the struct
     t_minishell *data;
 
-    data = malloc(sizeof(t_minishell));
+    data = malloc(sizeof(t_minishell)); //alloc mem inside the loop?
+    init_structs(data, envp);
     if (!data)
         return (1);
     if (ac != 1)
@@ -70,7 +70,7 @@ int main(int ac, char **av, char **envp)
         printf("Error: minishell don't take arguments\n");
         return (1);
     }
-    main_loop(data, envp, ac, av);
+    main_loop(data, envp, ac, av); //do I need to pass the ac and av?
     //free all the memory allocated
     return (data->exit_code);
 }

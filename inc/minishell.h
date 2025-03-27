@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/26 19:39:18 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:50:51 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void init_env(t_minishell *data, char **envp);
 void add_env(t_minishell *data, char *env);
 void init_exp(t_minishell *data, char **envp);
 void add_exp(t_minishell *data, char *env);
-void print_exported(t_parsed_env *cur_exp_node);
+void print_exported(t_pars_env *cur_exp_node);
 void check_exp(t_minishell *data, char *arg);
 void check_env(t_minishell *data, char *arg);
 void remove_env(t_minishell *data, char *arg);
