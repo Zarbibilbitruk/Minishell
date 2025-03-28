@@ -6,7 +6,7 @@
 /*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/28 18:58:28 by tautin--         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:39:21 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,10 @@ void set_env(char *title, char *value, t_minishell *data);
 
 // exec.c
 void exec_hub(t_minishell *data);
+
+
+// double linked list parser and other for now
+t_node	*init_node(void);
+void	append_list(t_node *current, char *input, int i);
 
 #endif

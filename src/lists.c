@@ -1,27 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   lists.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 10:27:05 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/28 20:02:38 by tautin--         ###   ########.fr       */
+/*   Created: 2025/03/28 20:07:17 by tautin--          #+#    #+#             */
+/*   Updated: 2025/03/28 20:39:40 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+t_node	*init_node(void)
 {
-	unsigned char	*tab;
-	size_t			i;
+    t_node	*new;
 
-	i = 0;
-	tab = malloc(nmemb * size);
-	if (tab == 0)
+	new = malloc(sizeof(t_node));
+	if (!new)
 		return (NULL);
-	while (i < (nmemb * size))
-		tab[i++] = 0;
-	return (tab);
+	new->index = 0;
+	new->data = NULL;
+	new->next = NULL;
+	new->previous = NULL;
+
+	return (new);
+}
+
+void	append_list(t_node *current, char *input, int i)
+{
+	t_node	*new;
+
+	new = init_node();
+	if (!new)
+		return ;
+	new->index = i;
+	new->data = input;
+	if (i != 0)
+	{
+		new->previous = current;
+		current->next = new;
+	}
 }

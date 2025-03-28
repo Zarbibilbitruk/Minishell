@@ -6,7 +6,7 @@
 /*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/28 19:44:05 by tautin--         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:14:43 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,15 @@ typedef struct s_parsed_command
 use of double linked list to plan for redirections and other similar situations
 we'll add values as needed
 */
-typedef struct s_parsed_env
+typedef struct s_node
 {
     // char    **envp;
     // char    *title;
-    char    *value;
-    struct s_parsed_env *next;
-    struct s_parsed_env *previous;
-}   t_parsed_env;
+    int     index;
+    char    *data;
+    struct s_node *next;
+    struct s_node *previous;
+}   t_node;
 
 typedef struct s_minishell
 {

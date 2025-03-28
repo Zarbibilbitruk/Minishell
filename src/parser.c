@@ -6,7 +6,7 @@
 /*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:39:14 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/28 19:52:35 by tautin--         ###   ########.fr       */
+/*   Updated: 2025/03/28 20:39:45 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,21 @@
 void    parser(char *input)
 {
 	char **inputs;
-	int i;	
+	int i;
+	t_node	*node;
 
 	inputs = ft_split(input, ' ');
 	if (!inputs)
 		return ;
 	i = 0;
+	node = init_node();
+	if (!node)
+		return ;
 	while (inputs[i])
 	{
 		if(correct_input(inputs[i])) //fonction a faire
-		{
-			ft_calloc()
-		}
+			append_list(node, inputs[i], i); //fonction a faire
 		i++;
 	}
 }
+
