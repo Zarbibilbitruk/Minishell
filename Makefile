@@ -15,19 +15,26 @@ NAME = minishell
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3 #remove -g3?
+CFLAGS = -Wall -Wextra -Werror -g3
 
 RM = rm -rf
-INC = ./inc/minishell.h #change?
+INC = ./inc/minishell.h
 
 # Directories
 SRCDIR = src/
 OBJDIR = obj/
-INCDIR = inc #change?
+INCDIR = inc/
 LIBFTDIR = libft/
 
 # Sources
 SRC = $(SRCDIR)main.c \
+		$(SRCDIR)builtin_utils.c \
+		$(SRCDIR)builtin.c \
+		$(SRCDIR)exec.c \
+		$(SRCDIR)free.c \
+		$(SRCDIR)init.c \
+		$(SRCDIR)pipes.c \
+		$(SRCDIR)processes.c \
 
 # Objects
 OBJ = $(patsubst $(SRCDIR)%.c, $(OBJDIR)%.o, $(SRC))

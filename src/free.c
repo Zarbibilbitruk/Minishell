@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 void    free_pipes(t_minishell *data)
 {
@@ -25,4 +25,16 @@ void    free_pipes(t_minishell *data)
         i++;
     }
     free(data->pipe_ends);
+}
+
+void ft_error(t_minishell *data, char *msg)
+{
+    free_pipes(data);
+    perror(msg);
+    //free_processes(data);
+    //free_commands(data);
+    //free_env(data);
+    //free_exported(data);
+    //free(data);
+    exit(1);
 }
