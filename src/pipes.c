@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 void    create_pipes(t_minishell *data)
 {
@@ -20,7 +20,7 @@ void    create_pipes(t_minishell *data)
     while (i < data->cmd_nb - 1)
     {
         if (pipe(data->pipe_ends[i]) == -1)
-            ft_error(data); // Error creating pipe
+            ft_error(data, "error creating pipe"); // Error creating pipe
         i++;
     }
 }

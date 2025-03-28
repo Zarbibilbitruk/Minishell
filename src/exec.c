@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
-int exec_hub(t_minishell *data)
+void   exec_hub(t_minishell *data)
 {
     if (data->cmd_nb == 1)
     {
-        if (ft_isbuiltin(data->cmd_list))
+        if (is_builtin(data->cmd_list))
             builtin_hub(data);
         else
             exec_cmd_hub(data);  // handles redirections, fork, execve
@@ -34,12 +34,12 @@ void    exec_cmd_hub(t_minishell *data)
     {
         data->pipe_ends = (int **)malloc(sizeof(int *) * (data->cmd_nb - 1));
         if (!data->pipe_ends)
-            ft_error(data); // Error allocating memory
+            ft_error(data, "error malloc"); // Error allocating memory
         while (i < data->cmd_nb - 1)
         {
             data->pipe_ends[i] = (int *)malloc(sizeof(int) * 2);
             if (!data->pipe_ends[i])
-                ft_error(data); // Error allocating memory
+                ft_error(data, "error malloc"); // Error allocating memory
             i++;
         }
         create_pipes(data);

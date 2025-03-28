@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 //exit utils
 int ft_isnbr(char *str)
@@ -45,85 +45,6 @@ void print_exit_error(char *arg, char *msg)
     ft_putstr_fd("\n", 2);
 }
 
-//env and export utils
-void init_env(t_minishell *data, char **envp)
-{
-    int i;
-
-    i = 0;
-    if (envp[i] == NULL)
-        return ;
-    data->env = malloc(sizeof(t_pars_env));
-    data->env->envp = envp;
-    data->env->next = NULL;
-    while (envp[i])
-    {
-        if (i == 0)
-        {
-            data->env->title = ft_substr(envp[i], 0, ft_strchr(envp[i], '=') - envp[i]);
-            data->env->value = ft_strdup(ft_strchr(envp[i], '=') + 1);
-        }
-        else
-            add_env(data, envp[i]);
-        i++;
-    }
-}
-
-void add_env(t_minishell *data, char *env)
-{
-    t_pars_env *new;
-    t_pars_env *tmp;
-
-    new = malloc(sizeof(t_pars_env));
-    new->envp = data->env->envp;
-    new->title = ft_substr(env, 0, ft_strchr(env, '=') - env);
-    new->value = ft_strdup(ft_strchr(env, '=') + 1);
-    new->next = NULL;
-    tmp = data->env;
-    while (tmp->next)
-        tmp = tmp->next;
-    tmp->next = new;
-}
-
-void init_exp(t_minishell *data, char **envp)
-{
-    int i;
-
-    i = 0;
-    if (envp[i] == NULL)
-        return ;
-    data->exported = malloc(sizeof(t_pars_env));
-    data->exported->envp = envp;
-    data->exported->next = NULL;
-    while (envp[i])
-    {
-        if (i == 0)
-        {
-            data->exported->title = ft_substr(envp[i], 0, ft_strchr(envp[i], '=') - envp[i]);
-            data->exported->value = ft_strdup(ft_strchr(envp[i], '=') + 1);
-        }
-        else
-            add_exp(data, envp[i]);
-        i++;
-    }
-}
-
-void add_exp(t_minishell *data, char *env)
-{
-    t_pars_env *new;
-    t_pars_env *tmp;
-
-    new = malloc(sizeof(t_pars_env));
-    new->envp = data->exported->envp;
-    new->title = ft_substr(env, 0, ft_strchr(env, '=') - env);
-    new->value = ft_strdup(ft_strchr(env, '=') + 1);
-    new->next = NULL;
-    tmp = data->exported;
-    while (tmp->next)
-        tmp = tmp->next;
-    tmp->next = new;
-}
-
 //learn how to put quotes in the value
 void print_exported(t_pars_env *cur_exp_node)
 {
@@ -141,6 +62,7 @@ void print_exported(t_pars_env *cur_exp_node)
 void check_exp(t_minishell *data, char *arg)
 {
     t_pars_env *cur_exp_node;
+    char *value_str;
 
     cur_exp_node = data->exported;
     while (cur_exp_node)
@@ -151,8 +73,9 @@ void check_exp(t_minishell *data, char *arg)
             {
                 free(cur_exp_node->value);
                 check_env(data, arg);
-            }         
-            cur_exp_node->value = ft_strdup(ft_strchr(arg, '=') + 1); 
+            }
+            value_str = ft_strchr(arg, '=');  
+            cur_exp_node->value = ft_strdup(value_str++); 
             return ;
         }
         cur_exp_node = cur_exp_node->next;

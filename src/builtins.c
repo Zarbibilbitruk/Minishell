@@ -14,17 +14,17 @@
 // In this file, we will implement the builtins functions: echo -n, cd, pwd, export, unset, env, exit
 // I coded this functions as the parsing would be done using strings, but I'll change if we use linked lists
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
-int is_builtin(t_minishell *data)
+int is_builtin(t_pars_cmd *command)
 {
-    if ((ft_strcmp(data->command->args[0], "echo") == 0)
-    || (ft_strcmp(data->command->args[0], "cd") == 0)
-    || (ft_strcmp(data->command->args[0], "pwd") == 0)
-    || (ft_strcmp(data->command->args[0], "export") == 0)
-    || (ft_strcmp(data->command->args[0], "unset") == 0)
-    || (ft_strcmp(data->command->args[0], "env") == 0)
-    || (ft_strcmp(data->command->args[0], "exit") == 0))
+    if ((ft_strcmp(command->args[0], "echo") == 0)
+    || (ft_strcmp(command->args[0], "cd") == 0)
+    || (ft_strcmp(command->args[0], "pwd") == 0)
+    || (ft_strcmp(command->args[0], "export") == 0)
+    || (ft_strcmp(command->args[0], "unset") == 0)
+    || (ft_strcmp(command->args[0], "env") == 0)
+    || (ft_strcmp(command->args[0], "exit") == 0))
         return 1;
     else
         return 0;
@@ -153,9 +153,9 @@ void builtin_env(t_minishell *data)
 void builtin_export(t_minishell *data)
 {
     int i;
-    t_pars_env *cur_exp_node;
+    //t_pars_env *cur_exp_node;
 
-    cur_exp_node = data->exported;
+    //cur_exp_node = data->exported;
     i = 1;
     if (!data->command->args[i] || (ft_strcmp(data->command->args[i], "--") == 0 && !data->command->args[i + 1]))
     {
@@ -173,7 +173,7 @@ void builtin_export(t_minishell *data)
     }
     while (data->command->args[i])
     {
-        check_export(data, data->command->args[i]);
+        check_exp(data, data->command->args[i]);
         i++;
     }
 }
@@ -190,8 +190,8 @@ void    builtin_unset(t_minishell *data)
     }
     while (data->command->args[i])
     {
-        remove_env(data, &data->command->args[i]);
-        remove_exp(data, &data->command->args[i]);
+        remove_env(data, data->command->args[i]);
+        remove_exp(data, data->command->args[i]);
         i++;
     }
     data->exit_code = 0;
@@ -201,12 +201,12 @@ void    builtin_unset(t_minishell *data)
 void bultin_cd(t_minishell *data)
 {
     char *old_pwd;
-    char *cur_dir;
+    //char *cur_dir;
     
     old_pwd = getcwd(NULL, 0);
     if (!data->command->args[1] || ft_strcmp(data->command->args[1], "~") == 0) //cd to home
     {
-        if (chdir(ft_getenv("HOME", &data)) == -1)
+        if (chdir(ft_getenv("HOME", data)) == -1)
         {
             perror("cd");
             data->exit_code = 1;
@@ -223,14 +223,14 @@ void bultin_cd(t_minishell *data)
     }
     else if (ft_strcmp(data->command->args[1], "-") == 0) //cd - to previous directory
     {
-        if (chdir(ft_getenv("OLDPWD", &data)) == -1)
+        if (chdir(ft_getenv("OLDPWD", data)) == -1)
         {
             perror("cd");
             data->exit_code = 1;
             return ;
         }
-        set_env("OLDPWD", old_pwd, &data);
-        set_env("PWD", getcwd(NULL, 0), &data);
+        set_env("OLDPWD", old_pwd, data);
+        set_env("PWD", getcwd(NULL, 0), data);
     }
     else
     {
@@ -240,7 +240,7 @@ void bultin_cd(t_minishell *data)
             data->exit_code = 1;
             return ;
         }
-        set_env("OLDPWD", old_pwd, &data);
-        set_env("PWD", getcwd(NULL, 0), &data);
+        set_env("OLDPWD", old_pwd, data);
+        set_env("PWD", getcwd(NULL, 0), data);
     }
 }
