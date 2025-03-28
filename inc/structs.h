@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/26 19:40:18 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/28 19:44:05 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,18 @@ typedef struct s_parsed_command
     char    **args; //we need an array with the cmd and args to pass to execve
 }   t_parsed_command;
 
+
+/*
+use of double linked list to plan for redirections and other similar situations
+we'll add values as needed
+*/
 typedef struct s_parsed_env
 {
-    char    **envp;
-    char    *title;
+    // char    **envp;
+    // char    *title;
     char    *value;
-    struct s_parsed_env *next; // will we use a linked list to store the variables?
+    struct s_parsed_env *next;
+    struct s_parsed_env *previous;
 }   t_parsed_env;
 
 typedef struct s_minishell

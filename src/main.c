@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:01:52 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/26 19:38:55 by afontele         ###   ########.fr       */
+/*   Updated: 2025/03/28 18:45:32 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void main_loop(t_minishell *data, char **envp, int ac, char **av)
     char *line;
     while (1)
     {
-        data->user_input = readline("minishell$ ");
+        data->user_input = readline("minishell$>");
         if (!data->user_input)
         {
             printf("exit\n");
