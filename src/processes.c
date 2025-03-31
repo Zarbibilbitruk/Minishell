@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 void    create_processes(t_minishell *data)
 {
@@ -21,7 +21,7 @@ void    create_processes(t_minishell *data)
     {
         cur_cmd->pid = fork();
         if (cur_cmd->pid == -1)
-            ft_error(data); // Error forking
+            ft_error(data, "error forking"); // Error forking
         if (cur_cmd->pid == 0)
         {
             close_unused_pipes(data, cur_cmd);
@@ -46,9 +46,9 @@ void    first_child_process(t_minishell *data, t_pars_cmd *cur_cmd)
     if (cur_cmd->infile)
     {
         fd_in = open(cur_cmd->infile, O_RDONLY, 0644);
-        if (data->fd_in == -1)
+        if (fd_in == -1)
         {
-            ft_error(data); // Error opening infile
+            ft_error(data, "error opening infile"); // Error opening infile
             data->exit_code = 1;
         }
     }
@@ -65,4 +65,29 @@ void    first_child_process(t_minishell *data, t_pars_cmd *cur_cmd)
     }
 }
 
+void midle_child_process(t_minishell *data, t_pars_cmd *cur_cmd)
+{
+    dup2(data->pipe_ends[cur_cmd->cmd_index - 1][0], STDIN_FILENO);
+    close(data->pipe_ends[cur_cmd->cmd_index - 1][0]);
+    dup2(data->pipe_ends[cur_cmd->cmd_index][1], STDOUT_FILENO);
+    close(data->pipe_ends[cur_cmd->cmd_index][1]);
+}
 
+void last_child_process(t_minishell *data, t_pars_cmd *cur_cmd)
+{
+    int fd_out;
+
+    dup2(data->pipe_ends[cur_cmd->cmd_index - 1][0], STDIN_FILENO);
+    close(data->pipe_ends[cur_cmd->cmd_index - 1][0]);
+    if (cur_cmd->outfile)
+    {
+        fd_out = open(cur_cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd_out == -1)
+        {
+            ft_error(data, "error opening outfile"); // Error opening outfile
+            data->exit_code = 1;
+        }
+    }
+    dup2(fd_out, STDOUT_FILENO);
+    close(fd_out);
+}
