@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tautin <tautin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 14:32:46 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 18:28:18 by tautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,17 @@ typedef struct s_minishell
     int    *pids; //array with the pids of the child processes - should I use pid_t?
     int     exit_code; //use a global variable to store the exit code (?)
 }   t_minishell;
+
+/*
+use of double linked list to plan for redirections and other similar situations
+we'll add values as needed
+*/
+typedef struct s_node
+{
+    int     index;
+    char    *data;
+    struct s_node *next;
+    struct s_node *previous;
+}   t_node;
 
 #endif
