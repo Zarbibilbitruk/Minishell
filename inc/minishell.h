@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/27 16:50:51 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 14:35:20 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include "structs.h"
+# include "libft/libft.h"
 
 struct s_minishell t_minishell;
 
@@ -73,6 +74,10 @@ void set_env(char *title, char *value, t_minishell *data);
 // exec.c
 void exec_hub(t_minishell *data);
 void    exec_cmd_hub(t_minishell *data);
+
+// lists.c
+t_node	*init_node(void);
+void	append_list(t_node *current, char *input, int i);
 
 // pipes.c
 void    create_pipes(t_minishell *data);

@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:01:52 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/27 20:57:10 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 14:42:03 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void main_loop(t_minishell *data)
 {
     while (1)
     {
-        data->user_input = readline("minishell$ ");
+        data->user_input = readline("minishell$>");
         if (!data->user_input)
         {
             printf("exit\n");

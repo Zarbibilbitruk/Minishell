@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/27 21:10:30 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 14:32:46 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,21 @@ typedef struct s_parsed_command
     struct s_parsed_command *next; //pointer to the next command in the list
 }   t_pars_cmd;
 
-typedef struct s_parsed_env //when using on the progra call cur_env_node ?
+typedef struct s_env //structure for the environment variables
 {
-    char    **envp;
-    char    *title;
-    char    *value;
-    struct s_parsed_env  *next; // will we use a linked list to store the variables?
     
-}   t_pars_env;
+    char    *key; //key of the variable
+    char    *value; //value of the variable
+    int     export; //1 if exported, 0 if not
+    struct s_env *next; //pointer to the next variable in the list
+}   t_env;
 
 typedef struct s_minishell
 {
     char   *user_input; //the line with the user input
-    t_pars_env *env; //call env_list ?
-    t_pars_env *exported; //call exp_list ?
+    char **envp; //array of strings with the environment variables
+    t_env *env; //call env_list ?
+    t_env *exported; //call exp_list ?
     t_pars_cmd *cmd_list; //pointer to the first command in the list
     t_pars_cmd *command; //test
     int     cmd_nb; //number of commands in the list
