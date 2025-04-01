@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 14:32:46 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 19:09:37 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_parsed_command
 typedef struct s_env //structure for the environment variables
 {
     
-    char    *key; //key of the variable
+    char    *title; //key of the variable
     char    *value; //value of the variable
     int     export; //1 if exported, 0 if not
     struct s_env *next; //pointer to the next variable in the list

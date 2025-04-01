@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/01 14:35:20 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 21:44:50 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include "structs.h"
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
-struct s_minishell t_minishell;
-
-//libf
-int ft_strcmp(char *s1, char *s2);
-void ft_putstr_fd(char *s, int fd);
-int ft_strncmp(const char *s1, const char *s2, size_t n);
-long long ft_atoll(const char *str);
-size_t ft_strlen(const char *s);
-char *ft_substr(char const *s, unsigned int start, size_t len);
-char *ft_strdup(const char *s);
-char *ft_strchr(const char *s, int c);
 
 //init.c
 void init_structs(t_minishell *data, char **envp);
@@ -51,7 +40,7 @@ void add_exp(t_minishell *data, char *env);
 
 // builtins.c
 int is_builtin(t_pars_cmd *command);
-void builtin_hub(t_minishell *data);
+void builtin_hub(t_minishell *data, t_pars_cmd *command);
 void builtin_pwd(t_minishell *data);
 void builtin_echo(t_minishell *data);
 void builtin_exit(t_minishell *data);
@@ -63,7 +52,7 @@ void builtin_cd(t_minishell *data);
 // builtin_utils.c
 int ft_isnbr(char *str);
 void print_exit_error(char *arg, char *msg);
-void print_exported(t_pars_env *cur_exp_node);
+void print_exported(t_env *cur_exp_node);
 void check_exp(t_minishell *data, char *arg);
 void check_env(t_minishell *data, char *arg);
 void remove_env(t_minishell *data, char *arg);
@@ -75,9 +64,16 @@ void set_env(char *title, char *value, t_minishell *data);
 void exec_hub(t_minishell *data);
 void    exec_cmd_hub(t_minishell *data);
 
+/* execve_hub */
+void    execute(t_minishell *data, t_pars_cmd *cur_cmd);
+void    execve_hub(t_minishell *data, t_pars_cmd *cur_cmd);
+void    execute_with_path(t_minishell *data, t_pars_cmd *cmd);
+char *build_path(char *path, char *cmd);
+void execve_error(t_minishell *data, char *cmd_path);
+
 // lists.c
-t_node	*init_node(void);
-void	append_list(t_node *current, char *input, int i);
+//t_node	*init_node(void);
+//void	append_list(t_node *current, char *input, int i);
 
 // pipes.c
 void    create_pipes(t_minishell *data);
@@ -89,9 +85,14 @@ void    create_processes(t_minishell *data);
 void    first_child_process(t_minishell *data, t_pars_cmd *cur_cmd);
 void    middle_child_process(t_minishell *data, t_pars_cmd *cur_cmd);
 void    last_child_process(t_minishell *data, t_pars_cmd *cur_cmd);
+void wait_loop(t_minishell *data);
 
 //free.c
 void free_pipes(t_minishell *data);
 void ft_error(t_minishell *data, char *msg);
+
+/* utils.c */
+long long   ft_atoll(const char *str);
+unsigned int ft_strcmp(char *s1, char *s2);
 
 # endif

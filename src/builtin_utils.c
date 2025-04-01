@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 18:18:08 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/27 16:52:40 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 19:02:03 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void print_exit_error(char *arg, char *msg)
 }
 
 //learn how to put quotes in the value
-void print_exported(t_pars_env *cur_exp_node)
+void print_exported(t_env *cur_exp_node)
 {
     while (cur_exp_node)
     {
@@ -61,7 +61,7 @@ void print_exported(t_pars_env *cur_exp_node)
 
 void check_exp(t_minishell *data, char *arg)
 {
-    t_pars_env *cur_exp_node;
+    t_env *cur_exp_node;
     char *value_str;
 
     cur_exp_node = data->exported;
@@ -87,7 +87,7 @@ void check_exp(t_minishell *data, char *arg)
 //update de node or add a new one
 void    check_env(t_minishell *data, char *arg)
 {
-    t_pars_env *cur_env_node;
+    t_env *cur_env_node;
 
     cur_env_node = data->env;
     while (cur_env_node)
@@ -106,8 +106,8 @@ void    check_env(t_minishell *data, char *arg)
 
 void    remove_env(t_minishell *data, char *arg)
 {
-    t_pars_env *cur_env_node;
-    t_pars_env *prev_env_node;
+    t_env *cur_env_node;
+    t_env *prev_env_node;
 
     cur_env_node = data->env;
     prev_env_node = NULL;
@@ -131,8 +131,8 @@ void    remove_env(t_minishell *data, char *arg)
 
 void    remove_exp(t_minishell *data, char *arg)
 {
-    t_pars_env *cur_exp_node;
-    t_pars_env *prev_exp_node;
+    t_env *cur_exp_node;
+    t_env *prev_exp_node;
 
     cur_exp_node = data->exported;
     prev_exp_node = NULL;
@@ -157,7 +157,7 @@ void    remove_exp(t_minishell *data, char *arg)
 //cd utils
 char    *ft_getenv(char *directory_name, t_minishell *data)
 {
-    t_pars_env *cur_env_node;
+    t_env *cur_env_node;
 
     cur_env_node = data->env;
     while (cur_env_node)
@@ -171,7 +171,7 @@ char    *ft_getenv(char *directory_name, t_minishell *data)
 
 void    set_env(char *title, char *value, t_minishell *data)
 {
-    t_pars_env *cur_env_node;
+    t_env *cur_env_node;
 
     cur_env_node = data->env;
     while (cur_env_node)

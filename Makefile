@@ -6,7 +6,7 @@
 #    By: afontele <afontele@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/06 18:35:57 by afontele          #+#    #+#              #
-#    Updated: 2025/03/11 13:44:47 by afontele         ###   ########.fr        #
+#    Updated: 2025/04/01 21:33:40 by afontele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,12 +29,16 @@ LIBFTDIR = libft/
 # Sources
 SRC = $(SRCDIR)main.c \
 		$(SRCDIR)builtin_utils.c \
-		$(SRCDIR)builtin.c \
+		$(SRCDIR)builtins.c \
 		$(SRCDIR)exec.c \
 		$(SRCDIR)free.c \
 		$(SRCDIR)init.c \
 		$(SRCDIR)pipes.c \
 		$(SRCDIR)processes.c \
+		$(SRCDIR)error.c \
+		$(SRCDIR)execve_hub.c \
+		$(SRCDIR)path \
+		$(SRCDIR)utils.c
 
 # Objects
 OBJ = $(patsubst $(SRCDIR)%.c, $(OBJDIR)%.o, $(SRC))

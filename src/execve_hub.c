@@ -6,29 +6,11 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:59:29 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/31 12:10:54 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 21:42:07 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void    execve_hub(t_minishell *data, t_pars_cmd *cur_cmd)
-{
-    char    **envp;
-    char    *path;
-    char    *cmd_path;
-    char    **paths;
-    
-    envp = get_envp(data);
-    path = get_path(data, cur_cmd->args[0]);
-    if (path == NULL)
-        ft_error(data, "command not found"); // Error command not found
-    paths = ft_split(path, ':');
-    cmd_path = find_cmd(data, paths, cur_cmd->args[0]);
-    if (cmd_path == NULL)
-        ft_error(data, "command not found"); // Error command not found
-    execve(cmd_path, cur_cmd->args, envp);
-}
 
 void    execute(t_minishell *data, t_pars_cmd *cur_cmd)
 {
@@ -39,7 +21,7 @@ void    execute(t_minishell *data, t_pars_cmd *cur_cmd)
         //free
         return ;
     }
-    if (is_builtin(cur_cmd->args[0]))
+    if (is_builtin(cur_cmd))
     {
         builtin_hub(data, cur_cmd);
         return ;
