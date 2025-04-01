@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:01:52 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/28 18:45:32 by tautin--         ###   ########.fr       */
+/*   Updated: 2025/04/01 14:42:03 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,17 @@
  *         - wait for the command to finish
  *         - free memory
  */
-#include "minishell.h"
+#include "../inc/minishell.h"
 
-void test(int signal)
+/*void test(int signal)
 {
     printf("signal : %d", signal);
-}
+}*/
 
 //loop that will keep the minishell running - return the prompt to user
 //maybe include the loop inside the main function
-void main_loop(t_minishell *data, char **envp, int ac, char **av)
+void main_loop(t_minishell *data)
 {
-    char *line;
     while (1)
     {
         data->user_input = readline("minishell$>");
@@ -46,6 +45,7 @@ void main_loop(t_minishell *data, char **envp, int ac, char **av)
         //init_structs
         //parse the command
         //execute the command
+        exec_hub(data);
         //wait for the command to finish
         //free the structs
         free(data->user_input);
@@ -54,15 +54,18 @@ void main_loop(t_minishell *data, char **envp, int ac, char **av)
 
 int main(int ac, char **av, char **envp)
 {
+    (void)av;
+    
     //I think we need to create a function to handle the signals and call it inside the main loop
-    struct sigaction    action;
+    /*struct sigaction    action;
     action.sa_handler = test;
     action.sa_flags = 0;
-    sigemptyset(&action.sa_mask);
+    sigemptyset(&action.sa_mask);*/
     //allocating memory for the struct
     t_minishell *data;
 
-    data = malloc(sizeof(t_minishell));
+    data = malloc(sizeof(t_minishell)); //alloc mem inside the loop?
+    init_structs(data, envp);
     if (!data)
         return (1);
     if (ac != 1)
@@ -70,7 +73,7 @@ int main(int ac, char **av, char **envp)
         printf("Error: minishell don't take arguments\n");
         return (1);
     }
-    main_loop(data, envp, ac, av);
+    main_loop(data); //do I need to pass the ac and av?
     //free all the memory allocated
     return (data->exit_code);
 }

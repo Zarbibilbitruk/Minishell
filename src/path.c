@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 10:17:44 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 14:41:24 by afontele         ###   ########.fr       */
+/*   Created: 2025/03/31 11:19:58 by afontele          #+#    #+#             */
+/*   Updated: 2025/03/31 11:21:37 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../inc/minishell.h"
 
-void	ft_bzero(void *s, size_t n)
+int check_full_path(char *cmd)
 {
-	unsigned char	*mem_ptr;
-	size_t			i;
-
-	mem_ptr = s;
-	i = 0;
-	while (i < n)
-	{
-		mem_ptr[i] = '\0';
-		i++;
-	}
+    if (ft_strchr(cmd[0], '/'))
+        return (1);
+    return (0);
 }
