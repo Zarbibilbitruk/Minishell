@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tautin <tautin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/01 14:35:20 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/01 18:34:07 by tautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,4 @@ void    last_child_process(t_minishell *data, t_pars_cmd *cur_cmd);
 void free_pipes(t_minishell *data);
 void ft_error(t_minishell *data, char *msg);
 
-# endif
+#endif
