@@ -6,11 +6,55 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 18:03:09 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 19:15:16 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:32:40 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+//TEST MY PROGRAM
+void init_input(t_minishell *data)
+{
+    data->command->args = ft_split(data->user_input, ' ');
+    if (!data->command->args)
+        ft_error(data, "error malloc"); // Error allocating memory
+    data->command->next = NULL;
+    data->command->cmd_index = 0;
+    data->command->hd_nb = 0;
+    data->command->infile = NULL;
+    data->command->outfile = NULL;
+    data->command->heredoc = NULL;
+    data->command->delimiters = NULL;
+    data->command->pid = 0;
+    data->cmd_nb = 1;
+    
+}
+
+void init_cmd(t_minishell *data)
+{
+    t_pars_cmd *cur_cmd_node;
+
+    cur_cmd_node = malloc(sizeof(t_pars_cmd));
+    if (!cur_cmd_node)
+        ft_error(data, "error malloc"); // Error allocating memory
+    data->cmd_list = cur_cmd_node;
+    data->cmd_list->next = NULL;
+    data->cmd_nb = 0;
+}
+
+void add_cmd(t_minishell *data, char *cmd)
+{
+    t_pars_cmd *new;
+    t_pars_cmd *tmp;
+
+    new = malloc(sizeof(t_pars_cmd));
+    new->args = ft_split(cmd, ' ');
+    new->next = NULL;
+    tmp = data->cmd_list;
+    while (tmp->next)
+        tmp = tmp->next;
+    tmp->next = new;
+}
 
 void    init_structs(t_minishell *data, char **envp)
 {

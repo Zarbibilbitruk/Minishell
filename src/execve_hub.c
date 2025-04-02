@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:59:29 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 21:42:07 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:40:34 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void    execute_with_path(t_minishell *data, t_pars_cmd *cmd)
     {
         cmd_path = ft_getenv("PATH", data);
         check_path_error(data, cmd_path);
-        cmd_path = build_path(cmd_path, cmd->args[0]);
+        cmd_path = build_path(data, cmd_path, cmd->args[0]);
         check_path_error(data, cmd_path);
     }
     else
@@ -49,12 +49,12 @@ void    execute_with_path(t_minishell *data, t_pars_cmd *cmd)
         cmd_path = ft_strdup(cmd->args[0]);
         check_path_error(data, cmd_path);
     }
-    if (execve(cmd_path, cmd->args, data->env->envp) == -1)
+    if (execve(cmd_path, cmd->args, data->envp) == -1)
         execve_error(data, cmd_path);
     free(cmd_path);
 }
 
-char *build_path(char *path, char *cmd)
+char *build_path(t_minishell *data ,char *path, char *cmd)
 {
     char *full_path;
     char *tmp;
@@ -81,7 +81,7 @@ char *build_path(char *path, char *cmd)
     free(possible_paths);
     return (NULL);
 }
-
+//should I exit the program if execve fail?
 void    execve_error(t_minishell *data, char *cmd_path)
 {
     perror(data->cmd_list->args[0]);
@@ -94,3 +94,4 @@ void    execve_error(t_minishell *data, char *cmd_path)
     else
         data->exit_code = 1; // Error other
 }
+

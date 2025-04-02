@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 19:09:37 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:50:41 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_minishell
     t_pars_cmd *command; //test
     int     cmd_nb; //number of commands in the list
     int     **pipe_ends; //array with the pipe[2] for each command
-    int    *pids; //array with the pids of the child processes - should I use pid_t?
+    //int    *pids; //array with the pids of the child processes - should I use pid_t?
     int     exit_code; //use a global variable to store the exit code (?)
 }   t_minishell;
 

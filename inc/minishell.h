@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/01 21:44:50 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:37:47 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,16 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <errno.h>
 # include "structs.h"
 # include "../libft/libft.h"
 
+
+//TEST
+void init_input(t_minishell *data);
+
+/* main.c */
+void main_loop(t_minishell *data);
 
 //init.c
 void init_structs(t_minishell *data, char **envp);
@@ -68,8 +75,14 @@ void    exec_cmd_hub(t_minishell *data);
 void    execute(t_minishell *data, t_pars_cmd *cur_cmd);
 void    execve_hub(t_minishell *data, t_pars_cmd *cur_cmd);
 void    execute_with_path(t_minishell *data, t_pars_cmd *cmd);
-char *build_path(char *path, char *cmd);
+char *build_path(t_minishell *data, char *path, char *cmd);
 void execve_error(t_minishell *data, char *cmd_path);
+
+/* path.c */
+int check_full_path(char *cmd);
+
+/* error.c */
+void check_path_error(t_minishell *data, char *cmd);
 
 // lists.c
 //t_node	*init_node(void);

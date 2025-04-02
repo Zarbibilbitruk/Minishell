@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:36:18 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 21:03:41 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:53:12 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,18 +91,17 @@ void last_child_process(t_minishell *data, t_pars_cmd *cur_cmd)
     dup2(fd_out, STDOUT_FILENO);
     close(fd_out);
 }
-
 void wait_loop(t_minishell *data)
 {
-    int i;
+    t_pars_cmd *cur_cmd;
     int status;
 
-    i = 0;
-    while (i < data->cmd_nb)
+    cur_cmd = data->cmd_list;
+    while (cur_cmd)
     {
-        waitpid(data->pids[i], &status, 0);
+        waitpid(cur_cmd->pid, &status, 0);
         if (WIFEXITED(status))
             data->exit_code = WEXITSTATUS(status);
-        i++;
+        cur_cmd = cur_cmd->next;
     }
 }

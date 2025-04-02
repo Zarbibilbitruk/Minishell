@@ -6,7 +6,7 @@
 #    By: afontele <afontele@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/06 18:35:57 by afontele          #+#    #+#              #
-#    Updated: 2025/04/01 21:33:40 by afontele         ###   ########.fr        #
+#    Updated: 2025/04/02 15:21:13 by afontele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ NAME = minishell
 # Compiler and flags
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3
+LDFLAGS = -lreadline
 
 RM = rm -rf
 INC = ./inc/minishell.h
@@ -37,7 +38,7 @@ SRC = $(SRCDIR)main.c \
 		$(SRCDIR)processes.c \
 		$(SRCDIR)error.c \
 		$(SRCDIR)execve_hub.c \
-		$(SRCDIR)path \
+		$(SRCDIR)path.c \
 		$(SRCDIR)utils.c
 
 # Objects
@@ -55,7 +56,7 @@ $(LIBFT):
 
 # Rule to compile the executable
 $(NAME): $(OBJ)
-		@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT)
+		@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT) $(LDFLAGS)
 		@echo "\033[32m[Executable created]\033[0m"
 
 # Rule to compile the objects

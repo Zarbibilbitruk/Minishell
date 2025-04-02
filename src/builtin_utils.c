@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 18:18:08 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 19:02:03 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:46:57 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int ft_isnbr(char *str)
         i++;
     }
     long long nb = ft_atoll(str);
-    if (nb > LLONG_MAX || nb < LLONG_MIN)
+    if (nb == LLONG_MAX || nb == LLONG_MIN)
         return (0);
     return (1);
 }

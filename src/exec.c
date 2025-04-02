@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:55:12 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/27 17:36:33 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 14:09:15 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void   exec_hub(t_minishell *data)
     if (data->cmd_nb == 1)
     {
         if (is_builtin(data->cmd_list))
-            builtin_hub(data);
+            builtin_hub(data, data->cmd_list);
         else
             exec_cmd_hub(data);  // handles redirections, fork, execve
     }
