@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/02 15:37:47 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:45:11 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@
 void init_input(t_minishell *data);
 
 /* main.c */
-void main_loop(t_minishell *data);
+void main_loop(t_minishell *data, char **envp);
 
 //init.c
-void init_structs(t_minishell *data, char **envp);
+void init_structs(t_minishell *data);
 void init_env(t_minishell *data, char **envp);
 void add_env(t_minishell *data, char *env);
 void init_exp(t_minishell *data, char **envp);
