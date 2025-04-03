@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:55:12 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/02 21:53:48 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:31:52 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void    exec_cmd_hub(t_minishell *data)
     int i;
     
     i = 0;
+    if (data->cmd_nb < 2)
+        return ;
     data->pipe_ends = (int **)malloc(sizeof(int *) * (data->cmd_nb - 1));
     if (!data->pipe_ends)
         ft_error(data, "error malloc"); // Error allocating memory
@@ -51,22 +53,21 @@ void    exec_cmd_hub(t_minishell *data)
 void exec_uniq_cmd(t_minishell *data)
 {
     int status;
-    t_pars_cmd *cur_cmd;
+    t_pars_cmd *cmd;
 
-    cur_cmd = data->cmd_list;
-    if (data->cmd_list->infile)
-        open_infile(data);
-    if (data->cmd_list->outfile)
-        open_outfile(data);
-    data->cmd_list->pid = fork();
-    if (data->cmd_list->pid == -1)
+    cmd = data->cmd_list;
+    if (cmd->infile && !open_infile(cmd, data))
+        return;
+    if (cmd->outfile && !open_outfile(cmd, data))
+        return;
+    cmd->pid = fork();
+    if (cmd->pid == -1)
         ft_error(data, "error fork"); // Error forking process
-    if (data->cmd_list->pid == 0)
-            execute(data, cur_cmd);
-    waitpid(data->cmd_list->pid, &status, 0);
+    if (cmd->pid == 0)
+            execute(data, cmd);
+    waitpid(cmd->pid, &status, 0);
     if (WIFEXITED(status))
-    data->exit_code = WEXITSTATUS(status);
-else if (WIFSIGNALED(status))
-    data->exit_code = 128 + WTERMSIG(status); // bash behavior
-
+        data->exit_code = WEXITSTATUS(status);
+    else if (WIFSIGNALED(status))
+        data->exit_code = 128 + WTERMSIG(status); // bash behavior
 }

@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 15:31:05 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/27 17:22:06 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:38:26 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void    create_pipes(t_minishell *data)
     while (i < data->cmd_nb - 1)
     {
         if (pipe(data->pipe_ends[i]) == -1)
+        //close all previous pipes if one fails
             ft_error(data, "error creating pipe"); // Error creating pipe
         i++;
     }

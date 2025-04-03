@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 11:19:58 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/02 14:36:47 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:04:19 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int check_full_path(char *cmd)
 {
-    if (cmd[0] == '/' || cmd[0] == '.' || cmd[0] == '~')
+    if (cmd[0] == '/')
         return (1);
     return (0);
 }

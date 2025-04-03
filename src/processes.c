@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:36:18 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/02 16:53:12 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/03 21:23:27 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void    create_processes(t_minishell *data)
             else
                 middle_child_process(data, cur_cmd);
             execute(data, cur_cmd);
+            exit(data->exit_code); // exit the child process
         }
         cur_cmd = cur_cmd->next;
     }
@@ -102,6 +103,9 @@ void wait_loop(t_minishell *data)
         waitpid(cur_cmd->pid, &status, 0);
         if (WIFEXITED(status))
             data->exit_code = WEXITSTATUS(status);
+        else if (WIFSIGNALED(status))
+            data->exit_code = 128 + WTERMSIG(status);
+        //fprintf(stderr, "[DEBUG] Child %d exited with status %d\n", cur_cmd->pid, data->exit_code);
         cur_cmd = cur_cmd->next;
     }
 }

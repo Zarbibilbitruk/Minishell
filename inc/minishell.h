@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/02 20:45:11 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:30:24 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void    exec_cmd_hub(t_minishell *data);
 /* execve_hub */
 void    execute(t_minishell *data, t_pars_cmd *cur_cmd);
 void    execve_hub(t_minishell *data, t_pars_cmd *cur_cmd);
-void    execute_with_path(t_minishell *data, t_pars_cmd *cmd);
+void    resolve_and_exec(t_minishell *data, t_pars_cmd *cmd);
 char *build_path(t_minishell *data, char *path, char *cmd);
 void execve_error(t_minishell *data, char *cmd_path);
 
@@ -103,6 +103,7 @@ void wait_loop(t_minishell *data);
 //free.c
 void free_pipes(t_minishell *data);
 void ft_error(t_minishell *data, char *msg);
+void ft_free_arraystr(char **arr);
 
 /* utils.c */
 long long   ft_atoll(const char *str);
