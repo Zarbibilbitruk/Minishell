@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:39:14 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/28 20:39:45 by tautin--         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:25:57 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    parser(char *input)
+/*void    parser(char *input)
 {
 	char **inputs;
 	int i;
@@ -31,5 +31,4 @@ void    parser(char *input)
 			append_list(node, inputs[i], i); //fonction a faire
 		i++;
 	}
-}
-
+}*/

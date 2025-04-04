@@ -6,73 +6,68 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:59:29 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/31 12:10:54 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:32:48 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void    execve_hub(t_minishell *data, t_pars_cmd *cur_cmd)
-{
-    char    **envp;
-    char    *path;
-    char    *cmd_path;
-    char    **paths;
-    
-    envp = get_envp(data);
-    path = get_path(data, cur_cmd->args[0]);
-    if (path == NULL)
-        ft_error(data, "command not found"); // Error command not found
-    paths = ft_split(path, ':');
-    cmd_path = find_cmd(data, paths, cur_cmd->args[0]);
-    if (cmd_path == NULL)
-        ft_error(data, "command not found"); // Error command not found
-    execve(cmd_path, cur_cmd->args, envp);
-}
-
 void    execute(t_minishell *data, t_pars_cmd *cur_cmd)
 {
     if (!cur_cmd->args || !cur_cmd->args[0])
     {
-        ft_error(data, "command not found"); // Error command not found
-        data->exit_code = 127;
-        //free
-        return ;
+        print_cmd_not_found(data, NULL);
+        exit(data->exit_code);
+        //need to free?
     }
-    if (is_builtin(cur_cmd->args[0]))
+    if (is_builtin(cur_cmd))
     {
         builtin_hub(data, cur_cmd);
         return ;
     }
     else
     {
-        execute_with_path(data, cur_cmd);
+        resolve_and_exec(data, cur_cmd);
         return ;
     }    
 }
 
-void    execute_with_path(t_minishell *data, t_pars_cmd *cmd)
+void    resolve_and_exec(t_minishell *data, t_pars_cmd *cmd)
 {
     char *cmd_path;
+    char *path;
 
     if (!check_full_path(cmd->args[0]))
     {
-        cmd_path = ft_getenv("PATH", data);
-        check_path_error(data, cmd_path);
-        cmd_path = build_path(cmd_path, cmd->args[0]);
-        check_path_error(data, cmd_path);
+        path = ft_getenv("PATH", data);
+        if (!path || !*path)
+        {
+            print_cmd_not_found(data, cmd->args[0]);
+            exit(data->exit_code);
+        }
+        cmd_path = build_path(data, path, cmd->args[0]);
+        if (!cmd_path)
+        {
+            print_cmd_not_found(data, cmd->args[0]);
+            exit(data->exit_code);
+        }
     }
     else
     {
         cmd_path = ft_strdup(cmd->args[0]);
-        check_path_error(data, cmd_path);
+        if (access(cmd_path, X_OK) == -1)
+        {
+            print_cmd_not_found(data, cmd->args[0]);
+            free(cmd_path);
+            exit(data->exit_code);
+        }
     }
-    if (execve(cmd_path, cmd->args, data->env->envp) == -1)
+    if (execve(cmd_path, cmd->args, data->envp) == -1)
         execve_error(data, cmd_path);
     free(cmd_path);
 }
 
-char *build_path(char *path, char *cmd)
+char *build_path(t_minishell *data ,char *path, char *cmd)
 {
     char *full_path;
     char *tmp;
@@ -90,16 +85,16 @@ char *build_path(char *path, char *cmd)
         free(tmp);
         if (access(full_path, X_OK) == 0)
         {
-            free(possible_paths);
+            free_arraystr(possible_paths);
             return (full_path);
         }
         free(full_path);
         i++;
     }
-    free(possible_paths);
+    free_arraystr(possible_paths);
     return (NULL);
 }
-
+//should I exit the program if execve fail?
 void    execve_error(t_minishell *data, char *cmd_path)
 {
     perror(data->cmd_list->args[0]);
@@ -112,3 +107,4 @@ void    execve_error(t_minishell *data, char *cmd_path)
     else
         data->exit_code = 1; // Error other
 }
+

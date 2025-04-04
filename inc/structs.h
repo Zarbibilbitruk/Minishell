@@ -6,7 +6,7 @@
 /*   By: tautin <tautin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 18:28:18 by tautin           ###   ########.fr       */
+/*   Updated: 2025/04/04 14:34:47 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ typedef struct s_parsed_command
 
 typedef struct s_env //structure for the environment variables
 {
-    
-    char    *key; //key of the variable
+    char    *title; //key of the variable
     char    *value; //value of the variable
     int     export; //1 if exported, 0 if not
     struct s_env *next; //pointer to the next variable in the list
@@ -40,14 +39,12 @@ typedef struct s_env //structure for the environment variables
 typedef struct s_minishell
 {
     char   *user_input; //the line with the user input
-    char **envp; //array of strings with the environment variables
+    char   **envp; //the envp from the main (do I need that?)
     t_env *env; //call env_list ?
     t_env *exported; //call exp_list ?
     t_pars_cmd *cmd_list; //pointer to the first command in the list
-    t_pars_cmd *command; //test
     int     cmd_nb; //number of commands in the list
     int     **pipe_ends; //array with the pipe[2] for each command
-    int    *pids; //array with the pids of the child processes - should I use pid_t?
     int     exit_code; //use a global variable to store the exit code (?)
 }   t_minishell;
 

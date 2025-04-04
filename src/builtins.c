@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/03/27 16:53:10 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/03 21:39:02 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 int is_builtin(t_pars_cmd *command)
 {
+    if (!command || !command->args || !command->args[0])
+        return 0;
     if ((ft_strcmp(command->args[0], "echo") == 0)
     || (ft_strcmp(command->args[0], "cd") == 0)
     || (ft_strcmp(command->args[0], "pwd") == 0)
@@ -30,21 +32,23 @@ int is_builtin(t_pars_cmd *command)
         return 0;
 }
 
-void builtin_hub(t_minishell *data)
+void builtin_hub(t_minishell *data, t_pars_cmd *command)
 {
-    if (ft_strcmp(data->command->args[0], "echo") == 0)
+    if (!command || !command->args || !command->args[0])
+        return ;
+    if (ft_strcmp(command->args[0], "echo") == 0)
         builtin_echo(data);
-    else if (ft_strcmp(data->command->args[0], "cd") == 0)
+    else if (ft_strcmp(command->args[0], "cd") == 0)
         builtin_cd(data);
-    else if (ft_strcmp(data->command->args[0], "pwd") == 0)
+    else if (ft_strcmp(command->args[0], "pwd") == 0)
         builtin_pwd(data);
-    else if (ft_strcmp(data->command->args[0], "export") == 0)
+    else if (ft_strcmp(command->args[0], "export") == 0)
         builtin_export(data);
-    else if (ft_strcmp(data->command->args[0], "unset") == 0)
+    else if (ft_strcmp(command->args[0], "unset") == 0)
         builtin_unset(data);
-    else if (ft_strcmp(data->command->args[0], "env") == 0)
+    else if (ft_strcmp(command->args[0], "env") == 0)
         builtin_env(data);
-    else if (ft_strcmp(data->command->args[0], "exit") == 0)
+    else if (ft_strcmp(command->args[0], "exit") == 0)
         builtin_exit(data);
 }
 
@@ -129,9 +133,9 @@ void builtin_exit(t_minishell *data)
 
 void builtin_env(t_minishell *data)
 {
-    t_pars_env *cur_env_node;
+    t_env *cur_env_node;
     cur_env_node = data->env;
-    if (!data->env->envp)
+    if (!data->envp)
     {
         data->exit_code = 1;
         return ;
@@ -153,7 +157,7 @@ void builtin_env(t_minishell *data)
 void builtin_export(t_minishell *data)
 {
     int i;
-    //t_pars_env *cur_exp_node;
+    //t_env *cur_exp_node;
 
     //cur_exp_node = data->exported;
     i = 1;
@@ -198,7 +202,7 @@ void    builtin_unset(t_minishell *data)
 }
 //update OLDPATH
 //update PWD
-void bultin_cd(t_minishell *data)
+void builtin_cd(t_minishell *data)
 {
     char *old_pwd;
     //char *cur_dir;

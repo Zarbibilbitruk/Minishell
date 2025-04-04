@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lists.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:07:17 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/28 20:39:40 by tautin--         ###   ########.fr       */
+/*   Updated: 2025/04/01 19:07:00 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_node	*init_node(void)
+/*t_node	*init_node(void)
 {
     t_node	*new;
 
@@ -41,4 +41,4 @@ void	append_list(t_node *current, char *input, int i)
 		new->previous = current;
 		current->next = new;
 	}
-}
+}*/

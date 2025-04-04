@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:01:52 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/01 14:42:03 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/02 20:55:28 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@
 {
     printf("signal : %d", signal);
 }*/
-
+// TODO: add free_cmd_list(), free_pipe_ends() here before reinitializing
 //loop that will keep the minishell running - return the prompt to user
-//maybe include the loop inside the main function
-void main_loop(t_minishell *data)
+void main_loop(t_minishell *data, char **envp)
 {
     while (1)
     {
-        data->user_input = readline("minishell$>");
+        init_structs(data);
+        data->user_input = readline("minishell$> ");
         if (!data->user_input)
         {
             printf("exit\n");
@@ -65,7 +65,6 @@ int main(int ac, char **av, char **envp)
     t_minishell *data;
 
     data = malloc(sizeof(t_minishell)); //alloc mem inside the loop?
-    init_structs(data, envp);
     if (!data)
         return (1);
     if (ac != 1)
@@ -73,7 +72,10 @@ int main(int ac, char **av, char **envp)
         printf("Error: minishell don't take arguments\n");
         return (1);
     }
-    main_loop(data); //do I need to pass the ac and av?
+    init_structs(data);
+    init_env(data, envp);
+    init_exp(data, envp);
+    main_loop(data, envp); //do I need to pass the ac and av?
     //free all the memory allocated
     return (data->exit_code);
 }

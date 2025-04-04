@@ -6,7 +6,7 @@
 #    By: afontele <afontele@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/06 18:35:57 by afontele          #+#    #+#              #
-#    Updated: 2025/03/11 13:44:47 by afontele         ###   ########.fr        #
+#    Updated: 2025/04/02 15:21:13 by afontele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ NAME = minishell
 # Compiler and flags
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3
+LDFLAGS = -lreadline
 
 RM = rm -rf
 INC = ./inc/minishell.h
@@ -29,12 +30,16 @@ LIBFTDIR = libft/
 # Sources
 SRC = $(SRCDIR)main.c \
 		$(SRCDIR)builtin_utils.c \
-		$(SRCDIR)builtin.c \
+		$(SRCDIR)builtins.c \
 		$(SRCDIR)exec.c \
 		$(SRCDIR)free.c \
 		$(SRCDIR)init.c \
 		$(SRCDIR)pipes.c \
 		$(SRCDIR)processes.c \
+		$(SRCDIR)error.c \
+		$(SRCDIR)execve_hub.c \
+		$(SRCDIR)path.c \
+		$(SRCDIR)utils.c
 
 # Objects
 OBJ = $(patsubst $(SRCDIR)%.c, $(OBJDIR)%.o, $(SRC))
@@ -51,7 +56,7 @@ $(LIBFT):
 
 # Rule to compile the executable
 $(NAME): $(OBJ)
-		@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT)
+		@$(CC) $(CFLAGS) -o $@ $^ $(LIBFT) $(LDFLAGS)
 		@echo "\033[32m[Executable created]\033[0m"
 
 # Rule to compile the objects
