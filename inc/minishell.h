@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/03 16:30:24 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:31:40 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,4 @@ void ft_free_arraystr(char **arr);
 long long   ft_atoll(const char *str);
 unsigned int ft_strcmp(char *s1, char *s2);
 
-# endif
+#endif

@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 21:43:42 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/03 21:39:02 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 int is_builtin(t_pars_cmd *command)
 {
+    if (!command || !command->args || !command->args[0])
+        return 0;
     if ((ft_strcmp(command->args[0], "echo") == 0)
     || (ft_strcmp(command->args[0], "cd") == 0)
     || (ft_strcmp(command->args[0], "pwd") == 0)
@@ -32,6 +34,8 @@ int is_builtin(t_pars_cmd *command)
 
 void builtin_hub(t_minishell *data, t_pars_cmd *command)
 {
+    if (!command || !command->args || !command->args[0])
+        return ;
     if (ft_strcmp(command->args[0], "echo") == 0)
         builtin_echo(data);
     else if (ft_strcmp(command->args[0], "cd") == 0)

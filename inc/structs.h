@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/02 20:57:08 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:34:47 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,17 @@ typedef struct s_minishell
     int     **pipe_ends; //array with the pipe[2] for each command
     int     exit_code; //use a global variable to store the exit code (?)
 }   t_minishell;
+
+/*
+use of double linked list to plan for redirections and other similar situations
+we'll add values as needed
+*/
+typedef struct s_node
+{
+    int index;
+    char *data;
+    struct s_node *next;
+    struct s_node *previous;
+}   t_node;
 
 #endif
