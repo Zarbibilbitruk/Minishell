@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tautin <tautin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
 /*   Updated: 2025/04/04 14:34:47 by afontele         ###   ########.fr       */
@@ -54,8 +54,8 @@ we'll add values as needed
 */
 typedef struct s_node
 {
-    int index;
-    char *data;
+    int     index;
+    char    *data;
     struct s_node *next;
     struct s_node *previous;
 }   t_node;
