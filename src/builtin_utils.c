@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 18:18:08 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/02 16:46:57 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/04 21:48:56 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,28 +62,44 @@ void print_exported(t_env *cur_exp_node)
 void check_exp(t_minishell *data, char *arg)
 {
     t_env *cur_exp_node;
+    char *key;
     char *value_str;
 
+    if (!is_valid_identifier(arg))
+    {
+        ft_putstr_fd("minishell: export: `", 2);
+        ft_putstr_fd(arg, 2);
+        ft_putstr_fd("': not a valid identifier\n", 2);
+        data->exit_code = 1;
+        return;
+    }
+    value_str = ft_strchr(arg, '=');
+    if (value_str)
+        key = ft_substr(arg, 0, value_str - arg);
+    else
+        key = ft_strdup(arg);
     cur_exp_node = data->exported;
     while (cur_exp_node)
     {
-        if (ft_strncmp(cur_exp_node->title, arg, ft_strlen(cur_exp_node->title)) == 0)
+        if (ft_strcmp(cur_exp_node->title, key) == 0)
         {
-            if (cur_exp_node->value)
+            if (value_str)
             {
                 free(cur_exp_node->value);
+                cur_exp_node->value = ft_strdup(value_str + 1);
                 check_env(data, arg);
             }
-            value_str = ft_strchr(arg, '=');  
-            cur_exp_node->value = ft_strdup(value_str++); 
-            return ;
+            free(key);
+            return;
         }
         cur_exp_node = cur_exp_node->next;
     }
-    if (ft_strchr(arg, '='))
+    if (value_str)
         add_env(data, arg);
     add_exp(data, arg);
+    free(key);
 }
+
 //update de node or add a new one
 void    check_env(t_minishell *data, char *arg)
 {
@@ -102,6 +118,16 @@ void    check_env(t_minishell *data, char *arg)
         cur_env_node = cur_env_node->next;
     }
     add_env(data, arg);
+}
+//should be handled in parse
+int is_valid_identifier(char *s)
+{
+    if (!s || (!ft_isalpha(s[0]) && s[0] != '_'))
+        return (0);
+    for (int i = 1; s[i]; i++)
+        if (!ft_isalnum(s[i]) && s[i] != '_')
+            return (0);
+    return (1);
 }
 
 void    remove_env(t_minishell *data, char *arg)

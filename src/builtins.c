@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/03 21:39:02 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/04 21:34:06 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,33 +32,33 @@ int is_builtin(t_pars_cmd *command)
         return 0;
 }
 
-void builtin_hub(t_minishell *data, t_pars_cmd *command)
+void builtin_hub(t_minishell *data, t_pars_cmd *cmd)
 {
-    if (!command || !command->args || !command->args[0])
+    if (!cmd || !cmd->args || !cmd->args[0])
         return ;
-    if (ft_strcmp(command->args[0], "echo") == 0)
-        builtin_echo(data);
-    else if (ft_strcmp(command->args[0], "cd") == 0)
-        builtin_cd(data);
-    else if (ft_strcmp(command->args[0], "pwd") == 0)
-        builtin_pwd(data);
-    else if (ft_strcmp(command->args[0], "export") == 0)
-        builtin_export(data);
-    else if (ft_strcmp(command->args[0], "unset") == 0)
-        builtin_unset(data);
-    else if (ft_strcmp(command->args[0], "env") == 0)
+    if (ft_strcmp(cmd->args[0], "echo") == 0)
+        builtin_echo(data, cmd);
+    else if (ft_strcmp(cmd->args[0], "cd") == 0)
+        builtin_cd(data, cmd);
+    else if (ft_strcmp(cmd->args[0], "pwd") == 0)
+        builtin_pwd(data, cmd);
+    else if (ft_strcmp(cmd->args[0], "export") == 0)
+        builtin_export(data, cmd);
+    else if (ft_strcmp(cmd->args[0], "unset") == 0)
+        builtin_unset(data, cmd);
+    else if (ft_strcmp(cmd->args[0], "env") == 0)
         builtin_env(data);
-    else if (ft_strcmp(command->args[0], "exit") == 0)
+    else if (ft_strcmp(cmd->args[0], "exit") == 0)
         builtin_exit(data);
 }
 
-void builtin_pwd(t_minishell *data)
+void builtin_pwd(t_minishell *data, t_pars_cmd *cmd)
 {
     char *cwd;
 
-    if (data->command->args[1])
+    if (cmd->args[1])
     {
-        ft_putstr_fd("pwd: too many arguments\n", 2); //msg: pwd: doesn't take arguments
+        ft_putstr_fd("minishell: pwd: too many arguments\n", 2); //msg: pwd: doesn't take arguments
         data->exit_code = 1;
         return ;
     }
@@ -73,26 +73,26 @@ void builtin_pwd(t_minishell *data)
     data->exit_code = 0;
     free(cwd);
 }
-
-void builtin_echo(t_minishell *data)
+//break into smaller functions
+void builtin_echo(t_minishell *data, t_pars_cmd *cmd)
 {
     int i = 1;
     int n_flag = 0;
 
-    while (data->command->args[i] && ft_strncmp(data->command->args[i], "-n", 2) == 0)
+    while (cmd->args[i] && ft_strncmp(cmd->args[i], "-n", 2) == 0)
     {
         int j = 1;
-        while (data->command->args[i][j] == 'n')
+        while (cmd->args[i][j] == 'n')
             j++;
-        if (data->command->args[i][j] != '\0') 
+        if (cmd->args[i][j] != '\0') 
             break;
         n_flag = 1;
         i++;
     }
-    while (data->command->args[i])
+    while (cmd->args[i])
     {
-        ft_putstr_fd(data->command->args[i], 1);
-        if (data->command->args[i + 1])
+        ft_putstr_fd(cmd->args[i], 1);
+        if (cmd->args[i + 1])
             ft_putstr_fd(" ", 1);
         i++;
     }
@@ -102,45 +102,46 @@ void builtin_echo(t_minishell *data)
     data->exit_code = 0;
 }
 
-void builtin_exit(t_minishell *data)
+void builtin_exit(t_minishell *data, t_pars_cmd *cmd)
 {
-    if (data->command->args[1] == NULL)
+    if (cmd->args[1] == NULL)
     {
         data->exit_code = 0;
         //free everything
         ft_putstr_fd("exit\n", 1);
         exit(0);
     }
-    else if (data->command->args[1] && !ft_isnbr(data->command->args[1]))
+    else if (cmd->args[1] && !ft_isnbr(cmd->args[1]))
     {
         data->exit_code = 2;
-        print_exit_error(data->command->args[1], "numeric argument required");
+        print_exit_error(cmd->args[1], "numeric argument required");
         //free everything
         exit(2);
     }
-    else if (data->command->args[1] && data->command->args[2])
+    else if (cmd->args[1] && cmd->args[2])
     {
         data->exit_code = 1;
         print_exit_error(NULL, "too many arguments");
     }
     else
     {
-        data->exit_code = ft_atoll(data->command->args[1]) % 256; //include atoll in libft
+        /*data->exit_code = ft_atoll(cmd->args[1]) % 256; //include atoll in libft
         ft_putstr_fd("exit\n", 1);
-        exit(data->exit_code);
+        exit(data->exit_code);*/
+        exit((unsigned char)ft_atoll(cmd->args[1]));
     }
 }
 
-void builtin_env(t_minishell *data)
+void builtin_env(t_minishell *data, t_pars_cmd *cmd)
 {
     t_env *cur_env_node;
     cur_env_node = data->env;
-    if (!data->envp)
+    if (!cur_env_node)
     {
         data->exit_code = 1;
         return ;
     }
-    if (data->command->args[1])
+    if (cmd->args[1])
     {
         ft_putstr_fd("env: too many arguments\n", 2); //msg: env: doesn't take arguments
         data->exit_code = 1;
@@ -148,57 +149,69 @@ void builtin_env(t_minishell *data)
     }
     while (cur_env_node)
     {
-        printf("%s=%s\n", cur_env_node->title, cur_env_node->value);
+        if (cur_env_node->value)
+            printf("%s=%s\n", cur_env_node->title, cur_env_node->value);
         cur_env_node = cur_env_node->next;
     }  
     data->exit_code = 0;
 }
 
-void builtin_export(t_minishell *data)
+void builtin_export(t_minishell *data, t_pars_cmd *cmd)
 {
     int i;
-    //t_env *cur_exp_node;
 
-    //cur_exp_node = data->exported;
     i = 1;
-    if (!data->command->args[i] || (ft_strcmp(data->command->args[i], "--") == 0 && !data->command->args[i + 1]))
+    if (!cmd->args[i] || (ft_strcmp(cmd->args[i], "--") == 0 && !cmd->args[i + 1]))
     {
         print_exported(data->exported);
         data->exit_code = 0;
         return ;
     }
-    if (ft_strcmp(data->command->args[i], "--") == 0 && data->command->args[i + 1])
+    if (ft_strcmp(cmd->args[i], "--") == 0 && cmd->args[i + 1])
         i++;
-    if (ft_strncmp(data->command->args[i], "-", 1) == 0 && data->command->args[i][1] != '\0')
+    if (ft_strncmp(cmd->args[i], "-", 1) == 0 && cmd->args[i][1] != '\0')
     {
         ft_putstr_fd("export: invalid option\n", 2); //OPTIONS ARE NOT ALLOWED
         data->exit_code = 1;
         return ;
     }
-    while (data->command->args[i])
+    while (cmd->args[i])
     {
-        check_exp(data, data->command->args[i]);
+        if (!is_valid_identifier(cmd->args[i]))
+        {
+            ft_putstr_fd("export: `", 2);
+            ft_putstr_fd(cmd->args[i], 2);
+            ft_putstr_fd("': not a valid identifier\n", 2);
+            data->exit_code = 1;
+        }
+        check_exp(data, cmd->args[i]);
         i++;
     }
+    data->exit_code = 0;
 }
 
-void    builtin_unset(t_minishell *data)
+void    builtin_unset(t_minishell *data, t_pars_cmd *cmd)
 {
     int i;
 
     i = 1;
-    if (!data->command->args[i])
+    while (cmd->args[i])
     {
-        data->exit_code = 0;
-        return ;
-    }
-    while (data->command->args[i])
-    {
-        remove_env(data, data->command->args[i]);
-        remove_exp(data, data->command->args[i]);
+        if (!is_valid_identifier(cmd->args[i]))
+        {
+            ft_putstr_fd("unset: `", 2);
+            ft_putstr_fd(cmd->args[i], 2);
+            ft_putstr_fd("': not a valid identifier\n", 2);
+            data->exit_code = 1;
+        }
+        else
+        {
+            remove_env(data, cmd->args[i]);
+            remove_exp(data, cmd->args[i]);
+            data->exit_code = 0;
+        }
         i++;
     }
-    data->exit_code = 0;
 }
 //update OLDPATH
 //update PWD
