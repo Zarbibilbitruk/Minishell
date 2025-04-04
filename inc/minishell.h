@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tautin <tautin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/04 14:31:40 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:56:52 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ void add_exp(t_minishell *data, char *env);
 
 // builtins.c
 int is_builtin(t_pars_cmd *command);
-void builtin_hub(t_minishell *data, t_pars_cmd *command);
-void builtin_pwd(t_minishell *data);
-void builtin_echo(t_minishell *data);
-void builtin_exit(t_minishell *data);
+void builtin_hub(t_minishell *data, t_pars_cmd *cmd);
+void builtin_pwd(t_minishell *data, t_pars_cmd *cmd);
+void builtin_echo(t_minishell *data, t_pars_cmd *cmd);
+void builtin_exit(t_minishell *data, t_pars_cmd *cmd);
 void builtin_env(t_minishell *data);
 void builtin_export(t_minishell *data);
 void builtin_unset(t_minishell *data);
