@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 18:18:08 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/04 21:48:56 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:47:43 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,19 +104,28 @@ void check_exp(t_minishell *data, char *arg)
 void    check_env(t_minishell *data, char *arg)
 {
     t_env *cur_env_node;
+    char *key;
+    char *value_str;
 
     cur_env_node = data->env;
+    key = ft_substr(arg, 0, ft_strchr(arg, '=') - arg);
+    value_str = ft_strchr(arg, '=');
     while (cur_env_node)
     {
-        if (ft_strncmp(cur_env_node->title, arg, ft_strlen(cur_env_node->title)) == 0)
+        if (ft_strcmp(cur_env_node->title, key) == 0)
         {
             if (cur_env_node->value)
+            {
                 free(cur_env_node->value);
-            cur_env_node->value = ft_strdup(ft_strchr(arg, '=') + 1);
+                free(key);
+            }
+            cur_env_node->value = value_str;
             return ;
         }
         cur_env_node = cur_env_node->next;
     }
+    free(key);
+    free(value_str);
     add_env(data, arg);
 }
 //should be handled in parse
@@ -180,34 +189,3 @@ void    remove_exp(t_minishell *data, char *arg)
     }
 }
 
-//cd utils
-char    *ft_getenv(char *directory_name, t_minishell *data)
-{
-    t_env *cur_env_node;
-
-    cur_env_node = data->env;
-    while (cur_env_node)
-    {
-        if (ft_strcmp(cur_env_node->title, directory_name) == 0)
-            return (cur_env_node->value);
-        cur_env_node = cur_env_node->next;
-    }
-    return (NULL);
-}
-
-void    set_env(char *title, char *value, t_minishell *data)
-{
-    t_env *cur_env_node;
-
-    cur_env_node = data->env;
-    while (cur_env_node)
-    {
-        if (ft_strcmp(cur_env_node->title, title) == 0)
-        {
-            free(cur_env_node->value);
-            cur_env_node->value = ft_strdup(value);
-            return ;
-        }
-        cur_env_node = cur_env_node->next;
-    }
-}

@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:47:11 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/04 21:34:06 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/07 22:23:04 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,33 @@ int is_builtin(t_pars_cmd *command)
         return 0;
 }
 
+void single_builtin(t_minishell *data, t_pars_cmd *cmd)
+{
+    int fd_in;
+    int fd_out;
+
+    fd_in = dup(STDIN_FILENO);
+    fd_out = dup(STDOUT_FILENO);
+    if (fd_in == -1 || fd_out == -1)
+    {
+        perror("dup");
+        return ;
+    }
+    if (!setup_redirections(cmd, data))
+    {
+        dup2(fd_in, STDIN_FILENO);
+        dup2(fd_out, STDOUT_FILENO);
+        close(fd_in);
+        close(fd_out);
+        return ;
+    }
+    builtin_hub(data, cmd);
+    dup2(fd_in, STDIN_FILENO);
+    dup2(fd_out, STDOUT_FILENO);
+    close(fd_in);
+    close(fd_out);
+}
+
 void builtin_hub(t_minishell *data, t_pars_cmd *cmd)
 {
     if (!cmd || !cmd->args || !cmd->args[0])
@@ -47,9 +74,9 @@ void builtin_hub(t_minishell *data, t_pars_cmd *cmd)
     else if (ft_strcmp(cmd->args[0], "unset") == 0)
         builtin_unset(data, cmd);
     else if (ft_strcmp(cmd->args[0], "env") == 0)
-        builtin_env(data);
+        builtin_env(data, cmd);
     else if (ft_strcmp(cmd->args[0], "exit") == 0)
-        builtin_exit(data);
+        builtin_exit(data, cmd);
 }
 
 void builtin_pwd(t_minishell *data, t_pars_cmd *cmd)
@@ -213,51 +240,4 @@ void    builtin_unset(t_minishell *data, t_pars_cmd *cmd)
         i++;
     }
 }
-//update OLDPATH
-//update PWD
-void builtin_cd(t_minishell *data)
-{
-    char *old_pwd;
-    //char *cur_dir;
-    
-    old_pwd = getcwd(NULL, 0);
-    if (!data->command->args[1] || ft_strcmp(data->command->args[1], "~") == 0) //cd to home
-    {
-        if (chdir(ft_getenv("HOME", data)) == -1)
-        {
-            perror("cd");
-            data->exit_code = 1;
-            return ;
-        }
-        //set_env("OLDPWD", old_pwd, &data);
-        //set_env("PWD", getcwd(NULL, 0), &data);
-    }
-    else if (data->command->args[2]) //cd to many arguments
-    {
-        ft_putstr_fd("cd: too many arguments\n", 2);
-        data->exit_code = 1;
-        return ;
-    }
-    else if (ft_strcmp(data->command->args[1], "-") == 0) //cd - to previous directory
-    {
-        if (chdir(ft_getenv("OLDPWD", data)) == -1)
-        {
-            perror("cd");
-            data->exit_code = 1;
-            return ;
-        }
-        set_env("OLDPWD", old_pwd, data);
-        set_env("PWD", getcwd(NULL, 0), data);
-    }
-    else
-    {
-        if (chdir(data->command->args[1]) == -1)
-        {
-            perror("cd");
-            data->exit_code = 1;
-            return ;
-        }
-        set_env("OLDPWD", old_pwd, data);
-        set_env("PWD", getcwd(NULL, 0), data);
-    }
-}
+

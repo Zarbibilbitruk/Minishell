@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:55:12 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/03 17:31:52 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/07 22:19:14 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ void   exec_hub(t_minishell *data)
     if (!data->cmd_list)
         return ;
     //printf("[DEBUG] Executing %d command(s)\n", data->cmd_nb);
+    generate_heredocs(data);
     if (data->cmd_nb == 1)
     {
         if (is_builtin(data->cmd_list))
-            builtin_hub(data, data->cmd_list);
+            single_builtin(data, data->cmd_list);
         else
             exec_uniq_cmd(data);  // handles redirections, fork, execve
     }

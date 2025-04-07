@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 10:59:29 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/03 16:32:48 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:52:50 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,3 +108,9 @@ void    execve_error(t_minishell *data, char *cmd_path)
         data->exit_code = 1; // Error other
 }
 
+int check_full_path(char *cmd)
+{
+    if (cmd[0] == '/')
+        return (1);
+    return (0);
+}
