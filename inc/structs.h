@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/08 12:43:06 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:49:22 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@
 typedef struct s_parsed_command
 {
     int cmd_index; //index of the command in the list
-    pid_t   pid; //pid of the child process - not sure if should store here or in the minishell struct - included in exec part
+    pid_t   pid; //pid of the child process - included in exec part
     int hd_nb; //number of heredoc - 0 if none
     char    **heredoc; //we need an array with the heredoc - NULL if none -included in exec part
     char    **delimiters; //we need an array with the delimiters - NULL if none
     char    *infile; //infile, NULL if none
     char    *outfile; //outfile, if pipe, NULL
-    int outfile_mode; // 0 for >, 1 for >>
+    int outfile_mode; // 1 for >, 2 for >>, 0 if we don't have it
     char    **args; //we need an array with the cmd and args to pass to execve
-    struct s_parsed_command *next; //pointer to the next command in the list
+    struct s_parsed_command *next; //pointer to the next command in the list 
 }   t_pars_cmd;
 
 typedef struct s_env //structure for the environment variables

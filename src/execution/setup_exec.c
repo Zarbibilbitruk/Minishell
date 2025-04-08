@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   setup_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:55:12 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/07 22:19:14 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/08 23:47:32 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void   exec_hub(t_minishell *data)
+
+//generate heredocs and redirect execution to pipeline, singlebuiltin or single cmd
+void   setup_exec(t_minishell *data)
 {
     if (!data->cmd_list)
         return ;
     //printf("[DEBUG] Executing %d command(s)\n", data->cmd_nb);
-    generate_heredocs(data);
+    generate_heredocs(data); // unlink and free the heredocs afoter !!!!
     if (data->cmd_nb == 1)
     {
         if (is_builtin(data->cmd_list))
@@ -26,10 +28,10 @@ void   exec_hub(t_minishell *data)
             exec_uniq_cmd(data);  // handles redirections, fork, execve
     }
     else
-        exec_cmd_hub(data);
+        multiple_cmds(data);
 }
-
-void    exec_cmd_hub(t_minishell *data)
+//hub to create pipes and processes for multiple commands
+void    multiple_cmds(t_minishell *data)
 {
     int i;
     
@@ -50,17 +52,15 @@ void    exec_cmd_hub(t_minishell *data)
     create_processes(data);
     free_pipes(data);
 }
- //separate redirection setup from command execution for cleaner design
+ // execute a single command without pipes
 void exec_uniq_cmd(t_minishell *data)
 {
     int status;
     t_pars_cmd *cmd;
 
     cmd = data->cmd_list;
-    if (cmd->infile && !open_infile(cmd, data))
-        return;
-    if (cmd->outfile && !open_outfile(cmd, data))
-        return;
+    if (!setup_redirections(data, cmd))
+        return ;
     cmd->pid = fork();
     if (cmd->pid == -1)
         ft_error(data, "error fork"); // Error forking process
