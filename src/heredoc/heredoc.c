@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:13:49 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/07 21:36:26 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:11:07 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,11 @@ void write_heredoc_file(t_minishell *data, char *filename, char *delimiter)
 void generate_heredocs(t_minishell *data)
 {
 	t_pars_cmd *cmd;
-	int hd_count = 0;
+	int hd_count;
 	int i;
 
 	i = 0;
+	hd_count = 0;
 	cmd = data->cmd_list;
 	while (cmd)
 	{
@@ -81,35 +82,20 @@ char *last_heredoc_path(t_pars_cmd *cmd)
 
 void redirect_heredoc(t_minishell *data, t_pars_cmd *cmd)
 {
-	char *path = last_heredoc_path(cmd);
+	char *path;
+	int fd_hd;
+	
+	path = last_heredoc_path(cmd);
 	if (!path)
 		return ;
-
-	int fd = open(path, O_RDONLY);
-	if (fd == -1)
-		ft_error(data, "open heredoc temp file");
-	if (dup2(fd, STDIN_FILENO) == -1)
+	fd_hd = open(path, O_RDONLY);
+	if (fd_hd == -1)
+    {
+        ft_putchar_fd("minishell: here_doc ", 2);
+        perror(path);
+        data->exit_code = 1;
+    }
+	if (dup2(fd_hd, STDIN_FILENO) == -1)
 		ft_error(data, "dup2 heredoc");
-	close(fd);
-}
-
-void cleanup_heredocs(t_minishell *data)
-{
-	t_pars_cmd *cmd = data->cmd_list;
-	int i;
-
-	while (cmd)
-	{
-		if (cmd->heredoc)
-		{
-			for (i = 0; cmd->heredoc[i]; i++)
-			{
-				unlink(cmd->heredoc[i]);
-				free(cmd->heredoc[i]);
-			}
-			free(cmd->heredoc);
-			cmd->heredoc = NULL;
-		}
-		cmd = cmd->next;
-	}
+	close(fd_hd);
 }

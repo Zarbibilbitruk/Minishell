@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:36:18 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/03 21:23:27 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/08 23:53:04 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,14 @@ void    create_processes(t_minishell *data)
             ft_error(data, "error forking"); // Error forking
         if (cur_cmd->pid == 0)
         {
-            close_unused_pipes(data, cur_cmd);
+            setup_child(data, cur_cmd);
+            /*close_unused_pipes(data, cur_cmd);
             if (cur_cmd->cmd_index == 0)
                 first_child_process(data, cur_cmd);
             else if (cur_cmd->cmd_index == data->cmd_nb - 1)
                 last_child_process(data, cur_cmd);
             else
-                middle_child_process(data, cur_cmd);
+                middle_child_process(data, cur_cmd);*/
             execute(data, cur_cmd);
             exit(data->exit_code); // exit the child process
         }
@@ -40,8 +41,30 @@ void    create_processes(t_minishell *data)
     wait_loop(data);
 }
 
-//check if builtin
-void    first_child_process(t_minishell *data, t_pars_cmd *cur_cmd)
+void setup_child(t_minishell *data, t_pars_cmd *cur_cmd)
+{
+    int idx;
+
+    idx = cur_cmd->cmd_index;
+    if (data->cmd_nb > 1)
+    {
+        if (idx > 0)
+        {
+            if (dup2(data->pipe_ends[idx - 1][0], STDIN_FILENO) == -1)
+                ft_error(data, "error dup2"); // Error duplicating pipe
+        }
+        if (idx < data->cmd_nb - 1)
+        {
+            if (dup2(data->pipe_ends[idx][1], STDOUT_FILENO) == -1)
+                ft_error(data, "error dup2"); // Error duplicating pipe
+        }
+    }
+    close_unused_pipes(data, cur_cmd);
+    if (!setup_redirections(cur_cmd, data))
+        exit(1); // exit the child process
+}
+
+/*void    first_child_process(t_minishell *data, t_pars_cmd *cur_cmd)
 {
     int fd_in;
     if (cur_cmd->infile)
@@ -91,7 +114,7 @@ void last_child_process(t_minishell *data, t_pars_cmd *cur_cmd)
     }
     dup2(fd_out, STDOUT_FILENO);
     close(fd_out);
-}
+}*/
 void wait_loop(t_minishell *data)
 {
     t_pars_cmd *cur_cmd;
