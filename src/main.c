@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:01:52 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/02 20:55:28 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/07 13:51:00 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 }*/
 // TODO: add free_cmd_list(), free_pipe_ends() here before reinitializing
 //loop that will keep the minishell running - return the prompt to user
+//TODO: check if all the malloc from libft func was freed!!!
 void main_loop(t_minishell *data, char **envp)
 {
     while (1)

@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/04 14:56:52 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:55:53 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void check_env(t_minishell *data, char *arg);
 void remove_env(t_minishell *data, char *arg);
 void remove_exp(t_minishell *data, char *arg);
 char *ft_getenv(char *directory_name, t_minishell *data);
-void set_env(char *title, char *value, t_minishell *data);
+void    set_env(t_env *list, char *title, char *value);
+int is_valid_identifier(char *s);
 
 // exec.c
 void exec_hub(t_minishell *data);

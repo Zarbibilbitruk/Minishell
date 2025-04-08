@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tautin <tautin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/04 14:34:47 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:43:06 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_parsed_command
     char    **delimiters; //we need an array with the delimiters - NULL if none
     char    *infile; //infile, NULL if none
     char    *outfile; //outfile, if pipe, NULL
+    int outfile_mode; // 0 for >, 1 for >>
     char    **args; //we need an array with the cmd and args to pass to execve
     struct s_parsed_command *next; //pointer to the next command in the list
 }   t_pars_cmd;
