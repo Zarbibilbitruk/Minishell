@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tautin <tautin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:04:11 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/01 18:34:07 by tautin           ###   ########.fr       */
+/*   Updated: 2025/04/08 17:20:50 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void    exec_cmd_hub(t_minishell *data);
 
 // lists.c
 t_node	*init_node(void);
-void	append_list(t_node *current, char *input, int i);
+void	append_list(t_node *current, char *input, int i, t_commande *control);
 
 // pipes.c
 void    create_pipes(t_minishell *data);

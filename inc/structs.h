@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tautin <tautin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:00:39 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/01 18:28:18 by tautin           ###   ########.fr       */
+/*   Updated: 2025/04/08 17:21:42 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,12 @@ typedef struct s_node
     struct s_node *next;
     struct s_node *previous;
 }   t_node;
+
+typedef struct s_commande
+{
+    int     nb_instruction;
+    t_node  *first;
+    t_node  *last;
+}   t_commande;
 
 #endif

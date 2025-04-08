@@ -6,7 +6,7 @@
 /*   By: tautin-- <tautin--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 20:07:17 by tautin--          #+#    #+#             */
-/*   Updated: 2025/03/28 20:39:40 by tautin--         ###   ########.fr       */
+/*   Updated: 2025/04/08 19:06:22 by tautin--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,31 @@ t_node	*init_node(void)
 	return (new);
 }
 
-void	append_list(t_node *current, char *input, int i)
+void	append_list(t_node *current, char *input, int i, t_commande *control)
 {
 	t_node	*new;
 
 	new = init_node();
 	if (!new)
 		return ;
-	new->index = i;
-	new->data = input;
-	if (i != 0)
+	if (i == 0 && input != NULL)
 	{
-		new->previous = current;
+		current->data = input;
+		current->index = 0;
+		control->first = current;
+	}
+	else if (input != NULL)
+	{
 		current->next = new;
+		new->data = input;
+		new->previous = current;
+		new->index = i;
+	}
+	else
+	{
+		current->next = new;
+		new->previous = current;
+		new->index = i;
+		control->last = new;
 	}
 }
