@@ -6,13 +6,11 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 20:27:44 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/02 16:43:58 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:01:23 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-//include in libft later
 
 long long	ft_atoll(const char *str)
 {
