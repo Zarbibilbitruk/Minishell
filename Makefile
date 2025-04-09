@@ -6,7 +6,7 @@
 #    By: afontele <afontele@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/06 18:35:57 by afontele          #+#    #+#              #
-#    Updated: 2025/04/02 15:21:13 by afontele         ###   ########.fr        #
+#    Updated: 2025/04/09 11:41:14 by afontele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,18 +29,23 @@ LIBFTDIR = libft/
 
 # Sources
 SRC = $(SRCDIR)main.c \
-		$(SRCDIR)builtin_utils.c \
 		$(SRCDIR)builtins.c \
-		$(SRCDIR)exec.c \
+		$(SRCDIR)builtin_utils.c \
+		$(SRCDIR)cd.c \
+		$(SRCDIR)env_exp.c \
+		$(SRCDIR)pwd_echo_exit_unset.c \
+		$(SRCDIR)error.c \
 		$(SRCDIR)free.c \
-		$(SRCDIR)init.c \
+		$(SRCDIR)execve_hub.c \
 		$(SRCDIR)pipes.c \
 		$(SRCDIR)processes.c \
-		$(SRCDIR)error.c \
-		$(SRCDIR)execve_hub.c \
-		$(SRCDIR)path.c \
-		$(SRCDIR)utils.c
-
+		$(SRCDIR)redirections.c \
+		$(SRCDIR)setup_exec.c \
+		$(SRCDIR)heredoc.c \
+		$(SRCDIR)env_management.c \
+		$(SRCDIR)init.c \
+		$(SRCDIR)utils.c \
+		
 # Objects
 OBJ = $(patsubst $(SRCDIR)%.c, $(OBJDIR)%.o, $(SRC))
 LIBFT = -L $(LIBFTDIR) -lft

@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 18:18:08 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/09 00:26:35 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:04:15 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,6 @@ int ft_isnbr(char *str)
     if (nb == LLONG_MAX || nb == LLONG_MIN)
         return (0);
     return (1);
-}
-
-void print_exit_error(char *arg, char *msg)
-{
-    ft_putstr_fd("exit\n", 1);
-    ft_putstr_fd("minishell: exit: ", 2);
-    if (arg)
-    {
-        ft_putstr_fd(arg, 2);
-        ft_putstr_fd(": ", 2);
-    }
-    ft_putstr_fd(msg, 2);
-    ft_putstr_fd("\n", 2);
 }
 
 //should be handled in parse

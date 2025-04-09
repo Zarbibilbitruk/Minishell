@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 17:01:52 by tautin--          #+#    #+#             */
-/*   Updated: 2025/04/08 23:46:01 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:31:34 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 //TODO: check if all the malloc from libft func was freed!!!
 // TOO: Create a global variable to store the exit code
 //loop that will keep the minishell running - return the prompt to user
-void main_loop(t_minishell *data, char **envp)
+void main_loop(t_minishell *data)
 {
     while (1)
     {
@@ -77,7 +77,7 @@ int main(int ac, char **av, char **envp)
     init_structs(data);
     init_env(data, envp);
     init_exp(data, envp);
-    main_loop(data, envp); //do I need to pass the ac and av?
+    main_loop(data); 
     //free all the memory allocated
     return (data->exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 20:13:49 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/09 00:11:07 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:58:36 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void redirect_heredoc(t_minishell *data, t_pars_cmd *cmd)
 	fd_hd = open(path, O_RDONLY);
 	if (fd_hd == -1)
     {
-        ft_putchar_fd("minishell: here_doc ", 2);
+        ft_putstr_fd("minishell: here_doc ", 2);
         perror(path);
         data->exit_code = 1;
     }

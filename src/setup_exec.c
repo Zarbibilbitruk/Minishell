@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   setup_execution.c                                  :+:      :+:    :+:   */
+/*   setup_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afontele <afontele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:55:12 by afontele          #+#    #+#             */
-/*   Updated: 2025/04/08 23:47:32 by afontele         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:58:06 by afontele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void exec_uniq_cmd(t_minishell *data)
     t_pars_cmd *cmd;
 
     cmd = data->cmd_list;
-    if (!setup_redirections(data, cmd))
+    if (!setup_redirections(cmd, data))
         return ;
     cmd->pid = fork();
     if (cmd->pid == -1)
